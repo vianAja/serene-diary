@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f3ec;
+  --foreground: #1d2326;
+  --muted: #647075;
+  --surface: #fffdf9;
+  --surface-soft: #f4f0ea;
+  --surface-strong: #ece7df;
+  --primary: #47626c;
+  --primary-soft: #89a8b2;
+  --secondary: #cee3ea;
+  --accent: #dcc0ab;
+  --outline: #c9cbc7;
+  --success: #4f7d68;
+  --warning: #ad7f58;
+  --danger: #ba4f4f;
+  --shadow: 0 18px 50px rgba(102, 126, 135, 0.12);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-strong: var(--surface-strong);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-outline: var(--outline);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(137, 168, 178, 0.26), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(220, 192, 171, 0.2), transparent 24%),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+a,
+button {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+::selection {
+  background: rgba(137, 168, 178, 0.3);
+}
+
+.glass-panel {
+  background: rgba(255, 253, 249, 0.8);
+  backdrop-filter: blur(14px);
+}
+
+.surface-card {
+  background: var(--surface);
+  border: 1px solid rgba(201, 203, 199, 0.65);
+  box-shadow: var(--shadow);
+}
+
+.fade-up {
+  animation: fade-up 500ms ease-out both;
+}
+
+.float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

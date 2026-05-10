@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container": "#eeeeee",
+                "secondary-fixed-dim": "#b5cad1",
+                "primary-fixed-dim": "#acccd6",
+                "on-secondary-fixed": "#0a1e24",
+                "outline-variant": "#c1c7ca",
+                "on-error-container": "#93000a",
+                "surface": "#faf9f9",
+                "on-background": "#1a1c1c",
+                "surface-container-high": "#e9e8e8",
+                "primary": "#45636c",
+                "on-primary": "#ffffff",
+                "tertiary-fixed-dim": "#ebbda2",
+                "tertiary": "#795740",
+                "surface-container-low": "#f4f3f4",
+                "surface-bright": "#faf9f9",
+                "primary-container": "#89a8b2",
+                "inverse-primary": "#acccd6",
+                "on-surface-variant": "#41484a",
+                "on-tertiary-container": "#4f321e",
+                "surface-variant": "#e3e2e3",
+                "inverse-surface": "#2f3131",
+                "on-tertiary-fixed-variant": "#5f402b",
+                "error-container": "#ffdad6",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed": "#2d1505",
+                "secondary-container": "#cee3ea",
+                "surface-dim": "#dadada",
+                "on-primary-fixed-variant": "#2d4b54",
+                "tertiary-container": "#c49a80",
+                "primary-fixed": "#c8e8f3",
+                "on-primary-container": "#1f3d46",
+                "surface-container-highest": "#e3e2e3",
+                "tertiary-fixed": "#ffdcc7",
+                "on-error": "#ffffff",
+                "outline": "#72787a",
+                "secondary": "#4e6268",
+                "inverse-on-surface": "#f1f0f1",
+                "on-secondary-fixed-variant": "#364a50",
+                "on-secondary-container": "#52666c",
+                "secondary-fixed": "#d1e6ed",
+                "background": "#faf9f9",
+                "on-primary-fixed": "#001f26",
+                "error": "#ba1a1a",
+                "surface-tint": "#45636c",
+                "on-surface": "#1a1c1c",
+                "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xl": "32px",
+                "xxl": "48px",
+                "sm": "8px",
+                "md": "16px",
+                "container-max": "1200px",
+                "unit": "4px",
+                "margin-mobile": "16px",
+                "xs": "4px",
+                "lg": "24px",
+                "gutter": "20px"
+            },
+            "fontFamily": {
+                "body-md": ["Manrope"],
+                "headline-md": ["Manrope"],
+                "headline-lg": ["Manrope"],
+                "body-lg": ["Manrope"],
+                "headline-sm": ["Manrope"],
+                "headline-lg-mobile": ["Manrope"],
+                "body-sm": ["Manrope"],
+                "label-md": ["Manrope"]
+            },
+            "fontSize": {
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #F1F0E8;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .soft-shadow {
+            box-shadow: 0px 4px 12px rgba(137, 168, 178, 0.08);
+        }
+        .input-underline {
+            border-bottom: 2px solid #E5E1DA;
+            transition: border-color 0.3s ease;
+        }
+        .input-underline:focus {
+            border-bottom-color: #45636c;
+            outline: none;
+        }
+        .bg-mesh {
+            background-color: #f1f0e8;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(137, 168, 178, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(179, 200, 207, 0.2) 0px, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-mesh min-h-screen flex items-center justify-center p-margin-mobile md:p-lg">
+<div class="w-full max-w-[440px] flex flex-col items-center">
+<!-- Brand Header -->
+<div class="mb-xl text-center">
+<div class="flex items-center justify-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary text-[32px]" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-headline-md text-headline-md font-extrabold text-primary tracking-tight">SereneDiary</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Stay mindful today</p>
+</div>
+<!-- Login Card -->
+<main class="w-full bg-surface-container-lowest rounded-xl p-lg md:p-xl soft-shadow border border-surface-variant/50">
+<header class="mb-xl">
+<h1 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Selamat datang kembali</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lanjutkan perjalanan refleksi diri Anda hari ini.</p>
+</header>
+<form action="#" class="space-y-lg">
+<!-- Social Login -->
+<button class="w-full flex items-center justify-center gap-md py-md px-lg border border-outline-variant bg-white rounded-lg font-body-md text-body-md text-on-surface hover:bg-surface-container-low transition-colors duration-200" type="button">
+<svg height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+<span>Masuk dengan Google</span>
+</button>
+<div class="relative flex items-center justify-center">
+<hr class="w-full border-outline-variant"/>
+<span class="absolute bg-surface-container-lowest px-md font-label-md text-label-md text-outline">ATAU</span>
+</div>
+<!-- Credentials -->
+<div class="space-y-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-primary" for="email">Email</label>
+<input class="font-body-md text-body-md py-sm bg-transparent input-underline placeholder:text-outline-variant" id="email" placeholder="nama@email.com" type="email"/>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-primary" for="password">Kata Sandi</label>
+<a class="font-label-md text-label-md text-primary-container hover:underline" href="#">Lupa Password?</a>
+</div>
+<input class="font-body-md text-body-md py-sm bg-transparent input-underline placeholder:text-outline-variant" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-headline-sm text-headline-sm py-md rounded-lg hover:shadow-lg transition-all duration-300 transform active:scale-[0.98]" type="submit">
+                    Masuk
+                </button>
+</form>
+<footer class="mt-xl text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Belum punya akun? 
+                    <a class="text-primary font-bold hover:underline" href="#">Daftar Akun Baru</a>
+</p>
+</footer>
+</main>
+<!-- Aesthetic Footer Elements -->
+<div class="mt-xl flex flex-col items-center gap-md opacity-60">
+<div class="flex gap-lg">
+<span class="material-symbols-outlined text-primary-container">spa</span>
+<span class="material-symbols-outlined text-primary-container">self_improvement</span>
+<span class="material-symbols-outlined text-primary-container">edit_note</span>
+</div>
+<div class="w-64 h-48 relative overflow-hidden rounded-xl bg-surface-variant/20">
+<img alt="Mindfulness nature visual" class="w-full h-full object-cover grayscale opacity-40 mix-blend-multiply" data-alt="A serene and minimalist nature scene featuring soft eucalyptus branches and dried flowers against a pale off-white background. The lighting is bright and diffused, characteristic of a clean light-mode aesthetic. The composition is airy with plenty of negative space, using a palette of muted greens, soft beiges, and atmospheric blues to evoke a sense of digital mindfulness and calm organization." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw-7xrS00HQwoCkDOiXxwi7MkNbqv2FI7gs-d6LsmjQWB0tcIAcj6LZaQKptMfUPBOmygBe57gfItIOWWMLG1NVBTQtJyC4II-TyeAbmZ_ymnXOSUibnBEm6EgXjnAGepZeggOReGTvnQrG8ynTnK5aFHKvZf3dswnm3drtFTONMUQFKWqbIrPRqrXpN_V9F9EQhRfVb8PvRkbB5Akb-haypgicQskuAxmxo4QDA01WOx2KPCfLIYUEcN_N11CGRTi73c3gZThkHfn"/>
+</div>
+</div>
+</div>
+</body></html>

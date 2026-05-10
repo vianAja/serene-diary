@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#2d1505",
+                    "inverse-surface": "#2f3131",
+                    "surface-container-highest": "#e3e2e3",
+                    "outline-variant": "#c1c7ca",
+                    "secondary-fixed": "#d1e6ed",
+                    "primary": "#45636c",
+                    "background": "#faf9f9",
+                    "tertiary-fixed": "#ffdcc7",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#5f402b",
+                    "on-secondary-fixed": "#0a1e24",
+                    "inverse-primary": "#acccd6",
+                    "on-background": "#1a1c1c",
+                    "inverse-on-surface": "#f1f0f1",
+                    "surface-bright": "#faf9f9",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#1f3d46",
+                    "primary-fixed-dim": "#acccd6",
+                    "primary-fixed": "#c8e8f3",
+                    "on-surface-variant": "#41484a",
+                    "on-tertiary-container": "#4f321e",
+                    "surface-dim": "#dadada",
+                    "on-surface": "#1a1c1c",
+                    "tertiary-fixed-dim": "#ebbda2",
+                    "secondary-container": "#cee3ea",
+                    "on-secondary-fixed-variant": "#364a50",
+                    "surface": "#faf9f9",
+                    "on-primary-fixed-variant": "#2d4b54",
+                    "surface-container-low": "#f4f3f4",
+                    "secondary": "#4e6268",
+                    "error": "#ba1a1a",
+                    "primary-container": "#89a8b2",
+                    "surface-variant": "#e3e2e3",
+                    "surface-container": "#eeeeee",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#45636c",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#52666c",
+                    "tertiary-container": "#c49a80",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#795740",
+                    "on-primary-fixed": "#001f26",
+                    "secondary-fixed-dim": "#b5cad1",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "outline": "#72787a",
+                    "surface-container-high": "#e9e8e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "24px",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "gutter": "20px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "xxl": "48px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "headline-lg-mobile": ["Manrope"],
+                    "headline-sm": ["Manrope"],
+                    "body-sm": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .shadow-custom { box-shadow: 0px 4px 12px rgba(137, 168, 178, 0.08); }
+        .habit-grid { display: grid; grid-template-columns: 200px repeat(7, 1fr); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col h-screen p-md space-y-sm overflow-y-auto bg-surface-container-lowest fixed left-0 top-0 w-64 shadow-md z-50">
+<div class="px-sm py-md">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">SereneDiary</h1>
+</div>
+<div class="px-sm pb-lg border-b border-surface-variant">
+<div class="flex items-center gap-md p-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-primary">Welcome back</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Stay mindful today</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-xs pt-md">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-label-md text-label-md">Daily</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container rounded-lg font-bold translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">view_week</span>
+<span class="font-label-md text-label-md">Weekly</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-md text-label-md">Monthly</span>
+</a>
+</nav>
+<div class="pt-lg">
+<button class="w-full py-md bg-primary text-on-primary rounded-lg font-bold shadow-sm hover:opacity-90 transition-opacity">
+                New Entry
+            </button>
+</div>
+<footer class="pt-xl space-y-xs border-t border-surface-variant mt-auto">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-label-md text-label-md">Help</span>
+</a>
+</footer>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-margin-mobile md:px-lg h-16 bg-surface shadow-sm md:pl-72">
+<div class="flex items-center gap-md">
+<span class="font-headline-sm text-headline-sm font-bold text-primary">Weekly Insights</span>
+</div>
+<div class="flex items-center gap-lg">
+<span class="material-symbols-outlined text-primary hover:bg-surface-container-low p-sm rounded-full cursor-pointer transition-colors duration-200">calendar_today</span>
+<span class="material-symbols-outlined text-primary hover:bg-surface-container-low p-sm rounded-full cursor-pointer transition-colors duration-200">notifications</span>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full object-cover" data-alt="A professional and serene portrait of a young woman with a calm expression, set against a soft, out-of-focus natural background. The lighting is bright and airy, reflecting a high-key light mode aesthetic with soft blue and beige tones that harmonize with a digital mindfulness application. Her appearance is natural and approachable, embodying a sense of personal well-being and daily focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8zsyACWcLHTcAVef4vVCUedk0y-jYWHiUgoEAUKbq-5sIHwej7xm6X-yme2PsAbXjYVeXK3ZXa8PClEnQRIg9oVuC-VIejXo-jMS34iTmqcS-6p4XelTEyWGCshyf1-VZbh5tMOLBttnyaoON7-xp7iWtT81r-moNa7K4Jm7bkKsfMaLAHPY53SC80uW3C1u97_LHJaTHVMfkioem3I0qL-ZxgOEoZxYeok_De26THLSkqNcG-xy2kZWZ_lUUadyCN6EL9q_2CPVh"/>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-12 px-margin-mobile md:pl-72 md:pr-lg max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- Habit Grid Section -->
+<div class="lg:col-span-8 space-y-lg">
+<div class="bg-surface-container-lowest p-lg rounded-lg shadow-custom">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Progress Mingguan</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">12 Mei - 18 Mei, 2024</p>
+</div>
+<div class="flex gap-sm">
+<button class="p-sm hover:bg-surface-container-low rounded-full transition-colors"><span class="material-symbols-outlined text-primary">chevron_left</span></button>
+<button class="p-sm hover:bg-surface-container-low rounded-full transition-colors"><span class="material-symbols-outlined text-primary">chevron_right</span></button>
+</div>
+</div>
+<!-- Horizontal Grid -->
+<div class="overflow-x-auto">
+<div class="min-w-[800px]">
+<!-- Grid Header -->
+<div class="habit-grid border-b border-surface-variant pb-md mb-md">
+<div class="font-label-md text-label-md text-on-surface-variant">HABIT TEMPLATE</div>
+<div class="text-center font-label-md text-label-md text-on-surface-variant">SEN<br/><span class="text-body-md text-on-surface">12</span></div>
+<div class="text-center font-label-md text-label-md text-on-surface-variant">SEL<br/><span class="text-body-md text-on-surface">13</span></div>
+<div class="text-center font-label-md text-label-md text-on-surface-variant">RAB<br/><span class="text-body-md text-on-surface">14</span></div>
+<div class="text-center font-label-md text-label-md text-on-surface-variant">KAM<br/><span class="text-body-md text-on-surface">15</span></div>
+<div class="text-center font-label-md text-label-md text-on-surface-variant">JUM<br/><span class="text-body-md text-on-surface">16</span></div>
+<div class="text-center font-label-md text-label-md text-on-surface-variant">SAB<br/><span class="text-body-md text-on-surface">17</span></div>
+<div class="text-center font-label-md text-label-md text-on-surface-variant">MIN<br/><span class="text-body-md text-on-surface">18</span></div>
+</div>
+<!-- Habit Rows -->
+<div class="space-y-sm">
+<!-- Row 1 -->
+<div class="habit-grid items-center py-sm group hover:bg-surface-container-low rounded-lg transition-colors">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-body-md text-body-md text-on-surface">Meditasi Pagi</span>
+</div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+</div>
+<!-- Row 2 -->
+<div class="habit-grid items-center py-sm group hover:bg-surface-container-low rounded-lg transition-colors">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary-container"></span>
+<span class="font-body-md text-body-md text-on-surface">Jurnal Syukur</span>
+</div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+</div>
+<!-- Row 3 -->
+<div class="habit-grid items-center py-sm group hover:bg-surface-container-low rounded-lg transition-colors">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="font-body-md text-body-md text-on-surface">Membaca 20 Hlm</span>
+</div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+</div>
+<!-- Row 4 -->
+<div class="habit-grid items-center py-sm group hover:bg-surface-container-low rounded-lg transition-colors">
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-body-md text-body-md text-on-surface">Olahraga Ringan</span>
+</div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div>
+<div class="flex justify-center"><span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Monthly Preview / Contextual Art -->
+<div class="bg-secondary-container rounded-lg p-lg flex items-center justify-between overflow-hidden relative min-h-[160px]">
+<div class="z-10 max-w-xs">
+<h3 class="font-headline-sm text-headline-sm text-on-secondary-container mb-xs">Keseimbangan Pikiran</h3>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant">Minggu ini Anda telah menyelesaikan 82% dari target mindfulness Anda. Terus pertahankan ritme ini!</p>
+</div>
+<img alt="Abstract Zen Garden" class="absolute right-0 top-0 h-full w-1/2 object-cover opacity-60 mix-blend-overlay" data-alt="An abstract, close-up digital photography of a zen sand garden with perfectly raked circular patterns and a single smooth grey stone. The lighting is soft morning sun, creating gentle shadows that emphasize the texture of the white sand. The color palette is composed of muted beiges, soft greys, and pale blues, creating a high-end, meditative atmosphere that aligns with a mindfulness digital app aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM1jMqrWxLHTNW_EbUrU1hokShYFWQGUOZAMecMxwgZFkG3PEJ_Jtf5x6xnr6dBoRqw2HhBgN9d9ZabJS-Dfl_TFaM6Nslb2TLufasivLKpsRWruogw1H6p8bieSZJ-3EXQ-WB6eYSuPcJ8aDLkIeiZOQx1g1BkmbEuoehKfIc_gxL3klo327H_Jon5LcnRZhv8AZncVp2EHZPav9HDgVho1xis1tTXx9tO_SjCPszWygAjFkvwtxiyg0D4_kn8B1pCB0CP53A4LIF"/>
+</div>
+</div>
+<!-- Sidebar Summary Section -->
+<div class="lg:col-span-4 space-y-lg">
+<!-- Weekly Progress Card -->
+<div class="bg-surface-container-lowest p-lg rounded-lg shadow-custom">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-lg">Overall Weekly Progress</h3>
+<div class="flex flex-col items-center py-md">
+<div class="relative flex items-center justify-center w-32 h-32">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-high" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" stroke-dasharray="351.8" stroke-dashoffset="63.3" stroke-linecap="round" stroke-width="10"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-headline-md text-headline-md text-primary">82%</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Selesai</span>
+</div>
+</div>
+<div class="mt-lg w-full space-y-sm">
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface-variant">Total Tugas</span>
+<span class="font-bold">28</span>
+</div>
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface-variant">Terselesaikan</span>
+<span class="font-bold">23</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Most Completions Card -->
+<div class="bg-tertiary-fixed p-lg rounded-lg shadow-custom">
+<div class="flex items-center gap-md mb-md">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<h3 class="font-headline-sm text-headline-sm text-on-tertiary-fixed">Day with most completions</h3>
+</div>
+<div class="flex items-end gap-sm mb-lg">
+<span class="font-headline-lg text-headline-lg text-on-tertiary-fixed">Sabtu</span>
+<span class="font-body-md text-body-md text-on-tertiary-fixed-variant mb-unit">17 Mei</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-tertiary-fixed-variant">
+                        Kamu menyelesaikan <span class="font-bold">semua habit</span> di hari ini. Luar biasa! Fokusmu sangat tajam di akhir pekan.
+                    </p>
+</div>
+<!-- Quick Stats Bento -->
+<div class="grid grid-cols-2 gap-md">
+<div class="bg-secondary-fixed p-md rounded-lg">
+<p class="font-label-md text-label-md text-on-secondary-fixed-variant">STREAK</p>
+<p class="font-headline-md text-headline-md text-on-secondary-fixed">12 Hari</p>
+</div>
+<div class="bg-surface-container-high p-md rounded-lg">
+<p class="font-label-md text-label-md text-on-surface-variant">MOOD AVG</p>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">sentiment_satisfied</span>
+<p class="font-headline-md text-headline-md text-primary">Calm</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-lg right-lg w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-95 transition-transform duration-150 z-50">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

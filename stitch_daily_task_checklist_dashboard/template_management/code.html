@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#2d1505",
+                    "inverse-surface": "#2f3131",
+                    "surface-container-highest": "#e3e2e3",
+                    "outline-variant": "#c1c7ca",
+                    "secondary-fixed": "#d1e6ed",
+                    "primary": "#45636c",
+                    "background": "#faf9f9",
+                    "tertiary-fixed": "#ffdcc7",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#5f402b",
+                    "on-secondary-fixed": "#0a1e24",
+                    "inverse-primary": "#acccd6",
+                    "on-background": "#1a1c1c",
+                    "inverse-on-surface": "#f1f0f1",
+                    "surface-bright": "#faf9f9",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-container": "#1f3d46",
+                    "primary-fixed-dim": "#acccd6",
+                    "primary-fixed": "#c8e8f3",
+                    "on-surface-variant": "#41484a",
+                    "on-tertiary-container": "#4f321e",
+                    "surface-dim": "#dadada",
+                    "on-surface": "#1a1c1c",
+                    "tertiary-fixed-dim": "#ebbda2",
+                    "secondary-container": "#cee3ea",
+                    "on-secondary-fixed-variant": "#364a50",
+                    "surface": "#faf9f9",
+                    "on-primary-fixed-variant": "#2d4b54",
+                    "surface-container-low": "#f4f3f4",
+                    "secondary": "#4e6268",
+                    "error": "#ba1a1a",
+                    "primary-container": "#89a8b2",
+                    "surface-variant": "#e3e2e3",
+                    "surface-container": "#eeeeee",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#45636c",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#52666c",
+                    "tertiary-container": "#c49a80",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#795740",
+                    "on-primary-fixed": "#001f26",
+                    "secondary-fixed-dim": "#b5cad1",
+                    "on-error-container": "#93000a",
+                    "on-error": "#ffffff",
+                    "outline": "#72787a",
+                    "surface-container-high": "#e9e8e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "gutter": "20px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "xxl": "48px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Manrope"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "body-md": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "headline-lg-mobile": ["Manrope"],
+                    "headline-sm": ["Manrope"],
+                    "body-sm": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        font-size: 20px;
+      }
+      body {
+        background-color: #faf9f9;
+        font-family: 'Manrope', sans-serif;
+      }
+      .ambient-shadow {
+        box-shadow: 0px 4px 12px rgba(137, 168, 178, 0.08);
+      }
+      .hover-lift:hover {
+        box-shadow: 0px 8px 24px rgba(137, 168, 178, 0.12);
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #c1c7ca;
+        border-radius: 10px;
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- Top AppBar -->
+<header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-margin-mobile md:px-lg h-16 bg-surface shadow-sm dark:bg-inverse-surface dark:shadow-none">
+<div class="flex items-center gap-md">
+<span class="md:hidden material-symbols-outlined text-primary cursor-pointer">menu</span>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-inverse-primary">SereneDiary</h1>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors duration-200">calendar_today</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-colors duration-200">notifications</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A clean, professional headshot of a person with a friendly expression, set against a soft, neutral studio background. The lighting is diffused and warm, reflecting a serene and mindful digital environment. The overall aesthetic is minimalist and high-quality, fitting a modern user profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSCDlJM-FQYkx-4KgA1ozm4zrDLowzXIYxt9vBXXJqMVFlJGvSi7q1IOjIQKwuUs6ptB16vdu9e9e1MMPdowFfFHoy3AQ8ew5Cmte_Nnx-JkK1Ou2IV4rfLz2-7WLmVW-15N0XklCbP4Mc2hmGLy0QbJ7Uph93FlcwKaA6avKzGzB2JsRiDPe-Ts9Cs6Bcjjmnt9Ygvc0mShid7O11AUphuhrsUqYbc7t4Ooe4RrKosAFC-WZpFAgBUg5CyLl-DwjiNt28ndCfM5R1"/>
+</div>
+</div>
+</header>
+<!-- Side Navigation Bar -->
+<aside class="hidden md:flex flex-col h-screen p-md space-y-sm overflow-y-auto bg-surface-container-lowest fixed left-0 top-0 w-64 shadow-md z-30 pt-20">
+<div class="px-sm mb-lg">
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary">Welcome back</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Stay mindful today</p>
+</div>
+<button class="flex items-center gap-md px-lg py-sm mb-lg bg-primary text-on-primary rounded-lg font-bold hover:bg-primary-container transition-all duration-200">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">New Entry</span>
+</button>
+<nav class="flex-1 space-y-unit">
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-label-md text-label-md">Daily</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">view_week</span>
+<span class="font-label-md text-label-md">Weekly</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm bg-secondary-container text-on-secondary-container rounded-lg font-bold translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-md text-label-md">Monthly</span>
+</a>
+</nav>
+<div class="pt-md border-t border-outline-variant space-y-unit">
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-lg py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-label-md text-label-md">Help</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-20 px-margin-mobile md:px-xl pb-xxl">
+<div class="max-w-container-max mx-auto">
+<header class="mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-on-background">Manajemen Template</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Personalisasi struktur diary harian Anda untuk ketenangan pikiran.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Left Column: Template List (Bento-style) -->
+<div class="lg:col-span-5 space-y-lg">
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow flex flex-col gap-md">
+<div class="flex justify-between items-center mb-sm">
+<h3 class="font-headline-sm text-headline-sm text-primary">Template Tersedia</h3>
+<button class="p-2 bg-secondary-container text-on-secondary-container rounded-full hover:scale-95 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<!-- Template Cards -->
+<div class="space-y-md">
+<div class="group p-md rounded-lg bg-surface-container-low border-2 border-primary ambient-shadow cursor-pointer transition-all">
+<div class="flex justify-between items-start mb-xs">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">light_mode</span>
+<span class="font-headline-sm text-headline-sm">Morning Routine</span>
+</div>
+<div class="flex h-6 w-11 items-center rounded-full bg-primary p-1 cursor-pointer">
+<div class="h-4 w-4 translate-x-5 rounded-full bg-on-primary transition-transform"></div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Fokus pada intensi pagi dan syukur.</p>
+<div class="flex gap-xs flex-wrap">
+<span class="px-sm py-1 bg-light-blue-grey bg-secondary-fixed text-on-secondary-fixed text-[10px] uppercase font-bold rounded-full">Active</span>
+<span class="px-sm py-1 bg-surface-variant text-on-surface-variant text-[10px] uppercase font-bold rounded-full">5 Items</span>
+</div>
+</div>
+<div class="group p-md rounded-lg bg-surface border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-xs">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">work</span>
+<span class="font-headline-sm text-headline-sm">Workday Focus</span>
+</div>
+<div class="flex h-6 w-11 items-center rounded-full bg-outline-variant p-1 cursor-pointer">
+<div class="h-4 w-4 translate-x-0 rounded-full bg-on-surface transition-transform"></div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Melacak produktivitas dan hambatan kerja.</p>
+<div class="flex gap-xs flex-wrap">
+<span class="px-sm py-1 bg-surface-variant text-on-surface-variant text-[10px] uppercase font-bold rounded-full">7 Items</span>
+</div>
+</div>
+<div class="group p-md rounded-lg bg-surface border border-outline-variant hover:border-primary-container hover:bg-surface-container-low transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-xs">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant">weekend</span>
+<span class="font-headline-sm text-headline-sm">Weekend Reflection</span>
+</div>
+<div class="flex h-6 w-11 items-center rounded-full bg-outline-variant p-1 cursor-pointer">
+<div class="h-4 w-4 translate-x-0 rounded-full bg-on-surface transition-transform"></div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Istirahat sejenak dan evaluasi mingguan.</p>
+<div class="flex gap-xs flex-wrap">
+<span class="px-sm py-1 bg-surface-variant text-on-surface-variant text-[10px] uppercase font-bold rounded-full">4 Items</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Inspiration Card -->
+<div class="relative overflow-hidden rounded-xl h-48 ambient-shadow group">
+<img alt="Mindful workplace" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A peaceful and aesthetic workspace featuring a clean wooden desk, a minimalist journal, a ceramic mug of tea, and a small green plant. The scene is bathed in natural morning sunlight coming through a window, casting soft shadows. The color palette is composed of soft beiges, muted greens, and clean whites, embodying the SereneDiary brand of digital mindfulness." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVjqj79g1V45Q1wtW-YJB8Jxngtv4cjjBypDEBVHua5M6vQv6io37VRMfCfHcohWOJcyHJcpXrPCjema4yR3Pxc3vyJCeWWQxwZTuTzJMA2K0Z3hneCZ7N0r-YkgwfR-Uc2wFNI8aKIaFPny76V3wBMuz1MGsxAK5wnkBD8UJXtJpyQ_tROHEsbj9dFMkaUDVdezRkFfBPNsYOQasLYZOdHZKGOKUlJQEe4V_SjnVJsYXv7hGXO-Zvtz66AlNdAUirbwMmpzP5gW2k"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent flex flex-col justify-end p-lg">
+<span class="text-on-primary font-bold font-headline-sm">Kembangkan Kebiasaan</span>
+<p class="text-on-primary/80 font-body-sm">Template membantu Anda konsisten dalam refleksi diri setiap hari.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Simple Editor -->
+<div class="lg:col-span-7">
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md mb-xl">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-background">Editor: Morning Routine</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Edit struktur input untuk template ini.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-lg py-sm bg-surface-container-high text-on-surface rounded-lg font-label-md hover:bg-surface-dim transition-colors">Batal</button>
+<button class="px-lg py-sm bg-primary text-on-primary rounded-lg font-label-md hover:bg-primary/90 transition-colors">Simpan Perubahan</button>
+</div>
+</div>
+<!-- Editor Canvas (Lined Notebook Style) -->
+<div class="space-y-lg border-l-4 border-secondary-container pl-lg py-sm">
+<!-- Editor Item 1 -->
+<div class="group relative flex items-start gap-md pb-md border-b border-soft-beige">
+<div class="mt-1 material-symbols-outlined text-outline-variant cursor-grab">drag_indicator</div>
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="font-label-md text-label-md text-primary bg-primary-container/20 px-2 py-0.5 rounded">Text Area</span>
+<input class="w-full font-headline-sm text-headline-sm bg-transparent border-none p-0 focus:ring-0 text-on-background" type="text" value="3 Hal yang saya syukuri pagi ini..."/>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">Placeholder: Sebutkan momen-momen kecil yang berarti...</p>
+</div>
+<button class="opacity-0 group-hover:opacity-100 p-2 text-error hover:bg-error-container rounded-full transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Editor Item 2 -->
+<div class="group relative flex items-start gap-md pb-md border-b border-soft-beige">
+<div class="mt-1 material-symbols-outlined text-outline-variant cursor-grab">drag_indicator</div>
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="font-label-md text-label-md text-primary bg-primary-container/20 px-2 py-0.5 rounded">Mood Picker</span>
+<input class="w-full font-headline-sm text-headline-sm bg-transparent border-none p-0 focus:ring-0 text-on-background" type="text" value="Bagaimana perasaan Anda saat bangun?"/>
+</div>
+<div class="flex gap-sm mt-sm">
+<span class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-sm">sentiment_satisfied</span>
+</span>
+<span class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-sm">sentiment_neutral</span>
+</span>
+<span class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-sm">sentiment_dissatisfied</span>
+</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 p-2 text-error hover:bg-error-container rounded-full transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Editor Item 3 -->
+<div class="group relative flex items-start gap-md pb-md border-b border-soft-beige">
+<div class="mt-1 material-symbols-outlined text-outline-variant cursor-grab">drag_indicator</div>
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="font-label-md text-label-md text-primary bg-primary-container/20 px-2 py-0.5 rounded">Checklist</span>
+<input class="w-full font-headline-sm text-headline-sm bg-transparent border-none p-0 focus:ring-0 text-on-background" type="text" value="Intensi Utama Hari Ini"/>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">Hanya pilih satu hal yang paling krusial.</p>
+</div>
+<button class="opacity-0 group-hover:opacity-100 p-2 text-error hover:bg-error-container rounded-full transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Add New Item Trigger -->
+<button class="w-full py-lg border-2 border-dashed border-outline-variant rounded-xl flex flex-col items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all group">
+<span class="material-symbols-outlined text-3xl mb-xs group-hover:scale-110 transition-transform">add_circle</span>
+<span class="font-label-md text-label-md">Tambah Item Baru</span>
+</button>
+</div>
+<!-- Extra Options -->
+<div class="mt-xl p-md bg-surface-container-low rounded-lg">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-md uppercase tracking-widest">Opsi Otomatisasi</h4>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<div>
+<p class="font-body-md text-body-md text-on-background">Munculkan otomatis setiap hari</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Setiap pukul 06:00 pagi.</p>
+</div>
+</div>
+<div class="flex h-6 w-11 items-center rounded-full bg-primary p-1 cursor-pointer">
+<div class="h-4 w-4 translate-x-5 rounded-full bg-on-primary transition-transform"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Hidden on MD up) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-40 flex justify-around items-center h-16">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="text-[10px] font-label-md">Daily</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="text-[10px] font-label-md font-bold">Monthly</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-label-md">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button (Only relevant for core action screens) -->
+<div class="md:hidden fixed bottom-20 right-6 z-50">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</body></html>

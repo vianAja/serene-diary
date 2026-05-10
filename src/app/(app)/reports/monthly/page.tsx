@@ -30,11 +30,11 @@ export default function MonthlyReportPage() {
                 Consistency Trends
               </p>
               <h2 className="mt-2 text-2xl font-semibold text-primary">
-                Ritme Mingguan
+                Weekly Rhythm
               </h2>
             </div>
             <span className="rounded-full bg-secondary px-4 py-2 text-xs font-semibold text-primary">
-              Rata-rata {report.summary.dailyAverage} tugas/hari
+              Average {report.summary.dailyAverage} tasks per day
             </span>
           </div>
 
@@ -97,7 +97,7 @@ export default function MonthlyReportPage() {
         <aside className="grid gap-6">
           <section className="surface-card rounded-[30px] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-              Bulan Ini Paling Kuat
+              Strongest This Month
             </p>
             <div className="mt-5 grid gap-3">
               {report.wins.map((win) => (

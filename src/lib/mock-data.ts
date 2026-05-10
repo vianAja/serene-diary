@@ -33,43 +33,43 @@ const templateDefinitions: TemplateDefinition[] = [
     id: "template-morning-routine",
     name: "Morning Routine",
     description:
-      "Rutinitas pagi yang membantu membuka hari dengan fokus, tenang, dan sadar prioritas.",
+      "A grounding morning routine designed to start the day with clarity, calm, and intentional priorities.",
     focus: "Mindful kick-off",
     color: "#47626c",
     shortLabel: "AM",
-    frequency: "Setiap Hari",
+    frequency: "Every Day",
     active: true,
     items: [
       {
         id: "morning-breathing",
-        label: "Meditasi 15 menit",
+        label: "15-minute meditation",
         category: "Health",
         description:
-          "Tarik napas lebih pelan untuk menurunkan noise mental sebelum kerja.",
+          "Use a slower breathing rhythm to reduce mental noise before the workday begins.",
         window: "06.00 - 07.00",
       },
       {
         id: "morning-gratitude",
-        label: "Jurnal 3 rasa syukur",
+        label: "Write 3 gratitude notes",
         category: "Personal",
         description:
-          "Mencatat 3 hal baik agar ritme hari tetap lebih stabil dan positif.",
+          "Capture three positive moments to create a steadier and more optimistic tone for the day.",
         window: "07.00 - 07.30",
       },
       {
         id: "morning-priority",
-        label: "Review prioritas utama",
+        label: "Review top priorities",
         category: "Work",
         description:
-          "Pastikan target yang paling penting terlihat sebelum agenda lain masuk.",
+          "Make the most important outcomes visible before the rest of the agenda takes over.",
         window: "08.00 - 08.20",
       },
       {
         id: "morning-hydration",
-        label: "Minum 2L air",
+        label: "Drink 2L of water",
         category: "Health",
         description:
-          "Kebiasaan kecil yang membantu energi tetap stabil sepanjang hari.",
+          "A simple habit that helps keep energy levels steady throughout the day.",
         window: "All day",
       },
     ],
@@ -78,33 +78,33 @@ const templateDefinitions: TemplateDefinition[] = [
     id: "template-workday-focus",
     name: "Workday Focus",
     description:
-      "Template untuk menjaga ritme produktif, mengurangi context switching, dan menangkap blocker.",
+      "A workday template built to protect productive rhythm, reduce context switching, and surface blockers early.",
     focus: "Execution flow",
     color: "#a16f54",
     shortLabel: "WK",
-    frequency: "Hari Kerja",
+    frequency: "Weekdays",
     active: false,
     items: [
       {
         id: "work-deep-focus",
-        label: "90 menit deep work",
+        label: "90 minutes of deep work",
         category: "Work",
-        description: "Blok fokus tanpa meeting untuk pekerjaan paling bernilai.",
+        description: "Reserve uninterrupted focus time for the most valuable work on your list.",
         window: "09.00 - 10.30",
       },
       {
         id: "work-blocker-check",
-        label: "Catat blocker",
+        label: "Log blockers",
         category: "Work",
-        description: "Supaya hambatan tidak tersimpan diam-diam sampai sore.",
+        description: "Capture obstacles early so they do not remain hidden until late in the day.",
         window: "11.00 - 11.15",
       },
       {
         id: "work-team-sync",
-        label: "Sync update ke tim",
+        label: "Send team update",
         category: "Team",
         description:
-          "Buat progress terlihat tanpa perlu follow-up manual berulang.",
+          "Keep progress visible without creating repeated manual follow-ups.",
         window: "15.00 - 15.30",
       },
     ],
@@ -113,35 +113,35 @@ const templateDefinitions: TemplateDefinition[] = [
     id: "template-weekend-reset",
     name: "Weekend Reset",
     description:
-      "Dipakai untuk evaluasi ringan, recovery energi, dan menutup minggu dengan sadar.",
+      "A lighter weekend reset for recovery, reflection, and a more intentional close to the week.",
     focus: "Reflection",
     color: "#5b7f68",
     shortLabel: "WE",
-    frequency: "Akhir Pekan",
+    frequency: "Weekend",
     active: false,
     items: [
       {
         id: "weekend-walk",
-        label: "Jalan santai 30 menit",
+        label: "30-minute mindful walk",
         category: "Health",
         description:
-          "Gerak ringan untuk melepas ketegangan setelah minggu yang sibuk.",
-        window: "Pagi / Sore",
+          "Use light movement to release tension after a demanding week.",
+        window: "Morning / Evening",
       },
       {
         id: "weekend-reflect",
-        label: "Refleksi minggu berjalan",
+        label: "Reflect on the current week",
         category: "Personal",
         description:
-          "Apa yang bekerja, apa yang perlu disederhanakan minggu depan.",
+          "Review what worked well and what should be simplified for next week.",
         window: "18.00 - 19.00",
       },
       {
         id: "weekend-plan",
-        label: "Susun agenda minggu depan",
+        label: "Plan next week",
         category: "Planning",
         description:
-          "Masuk Senin dengan pikiran yang lebih lapang dan terarah.",
+          "Start Monday with a calmer mind and a clearer sense of direction.",
         window: "19.00 - 19.30",
       },
     ],
@@ -157,7 +157,7 @@ const checklistTasks: ChecklistTask[] = templateDefinitions[0].items.map(
 );
 
 function formatDate(date: Date, options: Intl.DateTimeFormatOptions) {
-  return new Intl.DateTimeFormat("id-ID", options).format(date);
+  return new Intl.DateTimeFormat("en-US", options).format(date);
 }
 
 function makeDateOffset(base: Date, offset: number) {
@@ -242,7 +242,7 @@ export function getDailyDashboardSnapshot() {
       month: "long",
     })} Checklist`,
     quote:
-      '"Konsistensi kecil yang dirawat tenang akan terasa jauh lebih kuat daripada target besar yang terburu-buru."',
+      '"Small habits practiced consistently create stronger progress than large goals pursued in a rush."',
     progress,
     progressLabel: `${progress}%`,
     streakDays: 12,
@@ -253,14 +253,14 @@ export function getDailyDashboardSnapshot() {
       tags: ["Health", "Personal", "Work"],
     },
     highlights: [
-      { label: "Selesai minggu ini", value: "28 checklist" },
-      { label: "Kebiasaan paling stabil", value: "Meditasi pagi" },
-      { label: "Template favorit", value: "Morning Routine" },
+      { label: "Completed this week", value: "28 checklist items" },
+      { label: "Most consistent habit", value: "Morning meditation" },
+      { label: "Most used template", value: "Morning Routine" },
     ],
     monthlyPreview: {
-      title: "Konsistensi naik 14%",
+      title: "Consistency is up by 14%",
       description:
-        "Ritme penyelesaian checklist meningkat dibanding periode sebelumnya, terutama di pagi hari.",
+        "Checklist completion improved versus the previous period, especially across the morning routine.",
     },
   };
 }
@@ -272,27 +272,27 @@ export function getTemplateManagementSnapshot() {
     editorCards: [
       {
         title: "Objective",
-        value: "Menjaga pola awal hari tetap stabil",
+        value: "Keep the start of the day stable and focused",
         description:
-          "Template ini cocok untuk personal productivity dan self-regulation harian.",
+          "This template is well suited to personal productivity and daily self-regulation.",
       },
       {
         title: "Default cadence",
-        value: "4 item / hari",
+        value: "4 items per day",
         description:
-          "Jumlah item cukup pendek agar tidak terasa berat, tapi tetap memberi sense of progress.",
+          "The item count stays intentionally light so it feels manageable while still creating momentum.",
       },
       {
-        title: "Recommended apply",
-        value: "Senin sampai Jumat",
+        title: "Recommended schedule",
+        value: "Monday through Friday",
         description:
-          "Bisa dijadikan default template aktif di dashboard harian saat hari kerja.",
+          "A strong default template for the daily dashboard during the workweek.",
       },
       {
         title: "Tone",
         value: "Calm, reflective, and actionable",
         description:
-          "Bahasa checklist disusun singkat agar cepat dibaca saat pengguna baru membuka dashboard.",
+          "The checklist language stays concise so each item is easy to scan at the start of the day.",
       },
     ],
   };
@@ -302,7 +302,7 @@ export function getWeeklyReportSnapshot() {
   const days = weekDays();
 
   return {
-    heading: `Tracking Mingguan ${formatDate(days[0].fullDate, {
+    heading: `Weekly Tracking ${formatDate(days[0].fullDate, {
       day: "numeric",
       month: "long",
     })} - ${formatDate(days[6].fullDate, {
@@ -312,57 +312,57 @@ export function getWeeklyReportSnapshot() {
     days,
     metrics: [
       { label: "Completion rate", value: "82%" },
-      { label: "Template used", value: "3" },
-      { label: "Longest streak", value: "6 hari" },
-      { label: "Recovery day", value: "Rabu" },
+      { label: "Templates used", value: "3" },
+      { label: "Longest streak", value: "6 days" },
+      { label: "Recovery day", value: "Wednesday" },
     ],
     rows: [
       {
-        name: "Meditasi Pagi",
+        name: "Morning Meditation",
         color: "#47626c",
         completion: [true, true, true, false, true, true, true],
       },
       {
-        name: "Jurnal Syukur",
+        name: "Gratitude Journal",
         color: "#a16f54",
         completion: [true, false, true, true, true, false, true],
       },
       {
-        name: "Review Prioritas",
+        name: "Priority Review",
         color: "#89a8b2",
         completion: [true, true, true, true, true, true, false],
       },
       {
-        name: "Minum 2L Air",
+        name: "Drink 2L of Water",
         color: "#5b7f68",
         completion: [false, true, false, true, false, true, true],
       },
     ],
     dailyNotes: [
       {
-        day: "Senin",
-        completion: "4/4 selesai",
-        note: "Mulai minggu dengan sangat baik karena blok pagi masih cukup lapang.",
+        day: "Monday",
+        completion: "4/4 completed",
+        note: "The week started strongly because the morning block remained protected and spacious.",
       },
       {
-        day: "Rabu",
-        completion: "2/4 selesai",
-        note: "Ada meeting mendadak yang menggeser ritme. Cocok jadi hari evaluasi buffer.",
+        day: "Wednesday",
+        completion: "2/4 completed",
+        note: "Unexpected meetings disrupted the rhythm, making it a useful day to review buffer time.",
       },
       {
-        day: "Jumat",
-        completion: "4/4 selesai",
-        note: "Template workday membantu menjaga fokus meski agenda padat.",
+        day: "Friday",
+        completion: "4/4 completed",
+        note: "The workday template kept focus steady even with a tightly packed schedule.",
       },
     ],
     insight: {
-      title: "Pola terbaik muncul saat checklist pagi selesai sebelum jam 08.30",
+      title: "The strongest pattern appears when the morning checklist is completed before 8:30 AM",
       description:
-        "Ketika dua item pertama tuntas lebih awal, kemungkinan checklist lain selesai di hari yang sama meningkat cukup besar.",
+        "When the first two items finish early, the likelihood of completing the rest of the checklist on the same day rises significantly.",
       items: [
-        "Pertahankan blok tenang di pagi hari",
-        "Kurangi item non-esensial di Rabu",
-        "Aktifkan template Workday di hari meeting padat",
+        "Protect a calm morning block",
+        "Reduce non-essential items on Wednesdays",
+        "Activate the Workday template on heavy meeting days",
       ],
     },
   };
@@ -373,36 +373,36 @@ export function getMonthlyReportSnapshot() {
     summary: {
       totalCompleted: 128,
       period: formatDate(today, { month: "long", year: "numeric" }),
-      change: "+14% dibanding bulan sebelumnya",
+      change: "+14% versus last month",
       dailyAverage: 4.2,
     },
     bars: monthlyBars(),
     heatmap: monthlyHeatmap(),
     wins: [
       {
-        label: "Hari paling konsisten",
-        value: "Selasa",
+        label: "Most consistent day",
+        value: "Tuesday",
         description:
-          "Pola penyelesaian checklist tertinggi dan paling stabil ada di hari Selasa.",
+          "Tuesday delivered the highest and most stable checklist completion pattern.",
       },
       {
-        label: "Recovery terbaik",
+        label: "Best recovery template",
         value: "Weekend Reset",
         description:
-          "Template ini membantu mengembalikan ritme saat pertengahan minggu sempat menurun.",
+          "This template helped restore momentum when midweek consistency started to dip.",
       },
       {
-        label: "Fokus dominan",
+        label: "Dominant focus",
         value: "Morning clarity",
         description:
-          "Mayoritas checklist yang selesai datang dari aktivitas yang dimulai sebelum jam kerja.",
+          "Most completed checklist items came from activities started before the formal workday.",
       },
     ],
     templateSpotlight: {
       name: "Morning Routine",
       description:
-        "Template ini paling sering dipakai dan menghasilkan completion rate tertinggi pada bulan ini.",
-      tags: ["4 item", "Everyday", "Best completion"],
+        "This template was used most often and delivered the highest completion rate this month.",
+      tags: ["4 items", "Daily", "Best completion"],
     },
   };
 }
@@ -413,7 +413,7 @@ export async function getDashboardStatus() {
   if (!db) {
     return {
       label: "Demo Data",
-      description: "UI jalan penuh meski DATABASE_URL belum diisi.",
+      description: "The interface runs fully even when DATABASE_URL has not been configured yet.",
     };
   }
 
@@ -423,13 +423,13 @@ export async function getDashboardStatus() {
     return {
       label: "Neon Connected",
       description:
-        "Project siap melanjutkan integrasi persistence ke PostgreSQL.",
+        "The project is ready to continue with persistent PostgreSQL integration.",
     };
   } catch {
     return {
       label: "Connection Pending",
       description:
-        "DATABASE_URL ada, tapi koneksi database belum berhasil divalidasi.",
+        "DATABASE_URL is present, but the database connection has not been validated successfully yet.",
     };
   }
 }
@@ -476,8 +476,8 @@ export function buildDatabaseSeed() {
       progress,
       note:
         progress >= 75
-          ? "Hari berjalan cukup stabil dan item penting selesai lebih awal."
-          : "Perlu buffer tambahan karena ritme harian sempat terputus.",
+          ? "The day stayed stable and the most important items were completed early."
+          : "Extra buffer was needed because the daily rhythm was interrupted.",
     };
   });
 

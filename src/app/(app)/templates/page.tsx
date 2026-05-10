@@ -8,10 +8,10 @@ export default function TemplatesPage() {
     <div className="space-y-8">
       <header>
         <h2 className="text-[32px] font-bold tracking-[-0.02em] text-foreground">
-          Manajemen Template
+          Template Management
         </h2>
         <p className="mt-2 text-base text-muted">
-          Personalisasi struktur diary harian Anda untuk ketenangan pikiran.
+          Personalize your daily structure with reusable checklist templates.
         </p>
       </header>
       <TemplateManager initialTemplates={snapshot.templates} />

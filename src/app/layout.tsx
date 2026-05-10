@@ -10,7 +10,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "SereneDiary",
   description:
-    "Checklist harian yang tenang, terstruktur, dan siap dikembangkan dengan report mingguan, bulanan, serta SSO.",
+    "A calm, structured daily checklist workspace with reusable templates, weekly and monthly reporting, and secure SSO access.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${manrope.variable} h-full`}>
+    <html lang="en" className={`${manrope.variable} h-full`}>
       <body className="min-h-full">{children}</body>
     </html>
   );

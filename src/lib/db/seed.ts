@@ -15,7 +15,7 @@ async function seed() {
   const db = getDb();
 
   if (!db) {
-    throw new Error("DATABASE_URL belum tersedia. Isi env dulu sebelum seed.");
+    throw new Error("DATABASE_URL is not available. Configure your environment before running the seed.");
   }
 
   const payload = buildDatabaseSeed();
@@ -30,7 +30,7 @@ async function seed() {
   await db.insert(dailyChecklists).values(payload.checklists);
   await db.insert(checklistEntries).values(payload.entries);
 
-  console.log("Seed selesai. Template, checklist, dan entry demo sudah masuk.");
+  console.log("Seed complete. Templates, checklist records, and demo entries have been inserted.");
 }
 
 seed().catch((error) => {

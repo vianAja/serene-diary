@@ -16,8 +16,8 @@ export default function WeeklyReportPage() {
               {report.heading}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">
-              Matriks ini memudahkan Anda membaca pola konsistensi setiap hari
-              tanpa kehilangan konteks aktivitas yang sedang dibangun.
+              This view helps you read consistency patterns across the week
+              without losing sight of the habits and routines you are building.
             </p>
           </div>
 
@@ -88,7 +88,7 @@ export default function WeeklyReportPage() {
       <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <section className="surface-card rounded-[30px] p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-            Catatan Per Hari
+            Daily Notes
           </p>
           <div className="mt-5 grid gap-3">
             {report.dailyNotes.map((note) => (
@@ -110,7 +110,7 @@ export default function WeeklyReportPage() {
 
         <section className="rounded-[30px] border border-primary/10 bg-gradient-to-br from-[#fff8f2] to-white p-6 shadow-[0_20px_50px_rgba(220,192,171,0.16)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-            Insight Singkat
+            Key Insight
           </p>
           <h2 className="mt-3 text-2xl font-semibold text-primary">
             {report.insight.title}

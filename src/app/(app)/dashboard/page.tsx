@@ -79,7 +79,7 @@ export default async function DashboardPage() {
         <div className="max-w-2xl space-y-3">
           <div className="inline-flex w-fit items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
             <Sparkles className="h-4 w-4" />
-            Fokus Hari Ini
+            Today&apos;s Focus
           </div>
           <div>
             <h1 className="text-3xl font-bold tracking-[-0.03em] text-foreground md:text-5xl">
@@ -94,7 +94,7 @@ export default async function DashboardPage() {
         <div className="grid gap-4 md:min-w-[320px]">
           <div className="surface-card rounded-[26px] p-5">
             <div className="flex items-center justify-between text-sm text-muted">
-              <span>Progres Checklist</span>
+              <span>Checklist Progress</span>
               <span className="font-semibold text-primary">
                 {dashboard.progressLabel}
               </span>
@@ -115,13 +115,13 @@ export default async function DashboardPage() {
                 </span>
               </div>
               <p className="mt-3 text-3xl font-bold">{dashboard.streakDays}</p>
-              <p className="text-sm text-muted">hari konsisten</p>
+              <p className="text-sm text-muted">days in a row</p>
             </div>
             <div className="surface-card rounded-[24px] p-4">
               <div className="flex items-center gap-2 text-primary">
                 <CalendarClock className="h-4 w-4" />
                 <span className="text-xs font-semibold uppercase tracking-[0.22em]">
-                  Mode
+                  Status
                 </span>
               </div>
               <p className="mt-3 text-base font-semibold">{dbStatus.label}</p>
@@ -138,7 +138,7 @@ export default async function DashboardPage() {
               href="/templates"
               className="inline-flex items-center gap-2 rounded-full border border-outline bg-surface-soft px-4 py-2 text-sm font-semibold text-primary hover:-translate-y-0.5 hover:border-primary-soft"
             >
-              Pakai Template
+              Manage Templates
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -151,15 +151,15 @@ export default async function DashboardPage() {
         <aside className="grid gap-6">
           <section className="surface-card fade-up rounded-[30px] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-              Sumber Checklist
+              Checklist Source
             </p>
             <h3 className="mt-3 text-2xl font-semibold text-primary">
-              Template dapat digabung
+              Multiple templates can merge
             </h3>
             <p className="mt-2 text-sm leading-7 text-muted">
-              Aktifkan satu atau beberapa template dari halaman template
-              management, lalu task-task aktif akan tergabung ke checklist
-              utama di dashboard.
+              Activate one or more templates from the template management page,
+              and the active tasks will automatically merge into the main
+              checklist on the dashboard.
             </p>
           </section>
 
@@ -167,17 +167,17 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-                  Ringkasan Cepat
+                  Quick Summary
                 </p>
                 <h3 className="mt-2 text-xl font-semibold text-primary">
-                  Minggu Ini
+                  This Week
                 </h3>
               </div>
               <Link
                 href="/reports/weekly"
                 className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:-translate-y-0.5"
               >
-                Buka Report
+                Open Report
               </Link>
             </div>
             <div className="mt-5 grid gap-3">

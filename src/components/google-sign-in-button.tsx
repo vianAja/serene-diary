@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 
 export function GoogleSignInButton({
   className,
-  label = "Masuk dengan Google",
+  label = "Continue with Google",
 }: {
   className?: string;
   label?: string;

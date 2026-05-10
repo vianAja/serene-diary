@@ -68,10 +68,10 @@ export function ProfileMenu({ profile }: { profile: ViewerProfile }) {
               <UserRound className="mt-0.5 h-4 w-4 text-primary" />
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                  Status User
+                  User Status
                 </p>
                 <p className="text-sm text-foreground">
-                  {profile.signedIn ? "Sudah login" : "Belum login"}
+                  {profile.signedIn ? "Signed in" : "Signed out"}
                 </p>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function ProfileMenu({ profile }: { profile: ViewerProfile }) {
               <ShieldCheck className="mt-0.5 h-4 w-4 text-primary" />
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                  Metode Auth
+                  Auth Method
                 </p>
                 <p className="text-sm font-medium text-foreground">
                   {profile.authLabel}
@@ -103,7 +103,7 @@ export function ProfileMenu({ profile }: { profile: ViewerProfile }) {
               href="/sign-in"
               className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90"
             >
-              Buka Login
+              Open Sign In
             </Link>
           ) : null}
         </div>

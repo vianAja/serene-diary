@@ -39,15 +39,15 @@ export function DashboardChecklist({
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-            Dashboard Utama
+            Primary Dashboard
           </p>
           <h2 className="mt-2 text-[20px] font-semibold tracking-[-0.02em] text-foreground md:text-2xl md:text-primary">
-            Checklist Harian
+            Daily Checklist
           </h2>
         </div>
         <div className="flex items-center gap-3">
           <div className="rounded-full bg-secondary/70 px-4 py-2 text-sm font-semibold text-primary">
-            {completedTasks}/{totalTasks} selesai
+            {completedTasks}/{totalTasks} completed
           </div>
           <div className="w-24 overflow-hidden rounded-full bg-secondary/60">
             <div
@@ -72,7 +72,7 @@ export function DashboardChecklist({
                 type="button"
                 onClick={() => toggleTask(task.id)}
                 aria-pressed={task.completed}
-                aria-label={`Tandai ${task.label}`}
+                aria-label={`Mark ${task.label}`}
                 className={`mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border ${
                   task.completed
                     ? "border-primary bg-primary text-white"

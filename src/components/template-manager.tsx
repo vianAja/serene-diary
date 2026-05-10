@@ -169,11 +169,11 @@ export function TemplateManager({
       name: newTemplateDraft.name.trim(),
       description:
         newTemplateDraft.description.trim() ||
-        "Template baru untuk checklist harian.",
+        "A new template for structured daily checklist routines.",
       focus: "General",
       color: "#47626c",
       shortLabel: newTemplateDraft.name.trim().slice(0, 3).toUpperCase() || "NEW",
-      frequency: "Setiap Hari",
+      frequency: "Daily",
       active: false,
       items: [],
     };
@@ -219,7 +219,7 @@ export function TemplateManager({
         <div className="rounded-[24px] border border-outline/70 bg-white p-6 shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-[20px] font-semibold text-primary">
-              Template Tersedia
+              Available Templates
             </h3>
             <button
               type="button"
@@ -244,7 +244,7 @@ export function TemplateManager({
                       )
                     }
                     className="rounded-[12px] border border-outline bg-white px-3 py-3 text-lg font-semibold text-foreground outline-none focus:border-primary"
-                    placeholder="Judul template baru"
+                    placeholder="New template title"
                   />
                   <textarea
                     value={newTemplateDraft.description}
@@ -256,7 +256,7 @@ export function TemplateManager({
                       )
                     }
                     className="min-h-24 rounded-[12px] border border-outline bg-white px-3 py-3 text-sm text-muted outline-none focus:border-primary"
-                    placeholder="Deskripsi template baru"
+                    placeholder="New template description"
                   />
                   <div className="flex items-center gap-2">
                     <button
@@ -420,9 +420,9 @@ export function TemplateManager({
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
             <div className="absolute bottom-6">
-              <p className="text-[20px] font-semibold">Kembangkan Kebiasaan</p>
+              <p className="text-[20px] font-semibold">Build Better Habits</p>
               <p className="mt-2 max-w-xs text-sm leading-6 text-white/80">
-                Template membantu Anda konsisten dalam refleksi diri setiap hari.
+                Templates help you stay consistent with your daily routines and reflection habits.
               </p>
             </div>
           </div>
@@ -437,7 +437,7 @@ export function TemplateManager({
                 Editor: {selectedTemplate.name}
               </h3>
               <p className="text-sm leading-6 text-muted">
-                Edit struktur input untuk template ini.
+                Refine the structure and checklist items for this template.
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -498,7 +498,7 @@ export function TemplateManager({
                   <span className="flex h-10 w-10 items-center justify-center rounded-full border border-outline">
                     <Plus className="h-5 w-5" />
                   </span>
-                  <span className="text-sm font-semibold">Tambah Item Baru</span>
+                  <span className="text-sm font-semibold">Add New Item</span>
                 </div>
               </button>
             ) : (
@@ -513,7 +513,7 @@ export function TemplateManager({
                       }))
                     }
                     className="rounded-[12px] border border-outline bg-white px-4 py-3 text-base font-semibold text-foreground outline-none focus:border-primary"
-                    placeholder="Judul task baru"
+                    placeholder="New task title"
                   />
                   <textarea
                     value={taskDraft.description}
@@ -524,7 +524,7 @@ export function TemplateManager({
                       }))
                     }
                     className="min-h-24 rounded-[12px] border border-outline bg-white px-4 py-3 text-sm text-muted outline-none focus:border-primary"
-                    placeholder="Deskripsi task baru"
+                    placeholder="New task description"
                   />
                   <div className="flex items-center gap-2">
                     <button

@@ -28,17 +28,17 @@ export async function getViewerProfile(): Promise<ViewerProfile> {
   if (!session?.user) {
     return {
       name: "Guest User",
-      email: "Belum login",
+      email: "Not signed in",
       initials: "GU",
-      authLabel: "Belum login",
-      authDescription: "Akses akan terbuka setelah Google SSO berhasil.",
+      authLabel: "Signed out",
+      authDescription: "Access becomes available after a successful Google SSO sign-in.",
       avatarUrl: null,
       signedIn: false,
     };
   }
 
   const displayName = session.user.name || session.user.email || "Authenticated User";
-  const email = session.user.email || "Email tidak tersedia";
+  const email = session.user.email || "Email unavailable";
 
   return {
     name: displayName,
@@ -47,8 +47,8 @@ export async function getViewerProfile(): Promise<ViewerProfile> {
     authLabel: "Google SSO",
     authDescription:
       email.toLowerCase() === (process.env.ALLOWED_EMAIL ?? "").toLowerCase()
-        ? "Akses diizinkan oleh allowlist email."
-        : "Email tidak ada di allowlist.",
+        ? "Access granted through the approved email allowlist."
+        : "This email is not included in the approved allowlist.",
     avatarUrl: session.user.image ?? null,
     signedIn: true,
   };

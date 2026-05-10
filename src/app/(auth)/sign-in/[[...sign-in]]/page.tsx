@@ -11,11 +11,11 @@ type SignInPageProps = {
 
 function getErrorMessage(error: string | undefined) {
   if (error === "AccessDenied") {
-    return "Akses ditolak. Hanya email najwanoctavian@gmail.com yang diizinkan masuk.";
+    return "Access denied. Only najwanoctavian@gmail.com is authorized to enter this workspace.";
   }
 
   if (error === "MissingEmail") {
-    return "Google account Anda tidak mengembalikan email yang valid.";
+    return "Your Google account did not return a valid email address.";
   }
 
   return null;
@@ -23,6 +23,9 @@ function getErrorMessage(error: string | undefined) {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const session = await getServerSession(authOptions);
+  const appUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3001";
+  const authCallbackUrl = `${appUrl}/api/auth/callback/google`;
+  const helperCallbackUrl = `${appUrl}/auth/google/callback`;
 
   if (session?.user?.email?.toLowerCase() === "najwanoctavian@gmail.com") {
     redirect("/dashboard");
@@ -47,7 +50,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               Welcome Back
             </h1>
             <p className="mt-2 text-base text-muted">
-              Continue your mindfulness journey.
+              Continue into your daily operations workspace.
             </p>
           </header>
 
@@ -78,9 +81,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
                   Redirect URI
                 </p>
-                <p className="mt-2 break-all text-sm text-foreground">
-                  http://localhost:3001/api/auth/callback/google
-                </p>
+                <p className="mt-2 break-all text-sm text-foreground">{authCallbackUrl}</p>
               </div>
             </div>
 
@@ -108,10 +109,10 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           <section className="w-full rounded-[20px] border border-outline/40 bg-white p-8 shadow-[0px_4px_12px_rgba(137,168,178,0.08)]">
             <header className="mb-8">
               <h1 className="text-[20px] font-semibold text-foreground">
-                Selamat datang kembali
+                Welcome back
               </h1>
               <p className="mt-2 text-sm text-muted">
-                Lanjutkan perjalanan refleksi diri Anda hari ini.
+                Continue into your structured daily checklist workspace.
               </p>
             </header>
 
@@ -121,7 +122,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               <div className="relative flex items-center justify-center">
                 <div className="h-px w-full bg-outline/40" />
                 <span className="absolute bg-white px-4 text-[12px] font-semibold uppercase tracking-[0.18em] text-muted">
-                  Akses Aman
+                  Secure Access
                 </span>
               </div>
 
@@ -131,8 +132,8 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                     Hanya Google SSO
                   </p>
                   <p className="mt-2 text-sm leading-7 text-muted">
-                    Login dibatasi hanya untuk akun Google yang ada di allowlist.
-                    Email lain akan otomatis ditolak.
+                    Sign-in is limited to the approved Google account on the
+                    allowlist. Any other email will be blocked automatically.
                   </p>
                 </div>
 
@@ -149,11 +150,9 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                   <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-primary">
                     Redirect URI
                   </p>
-                  <p className="mt-2 break-all text-sm text-foreground">
-                    http://localhost:3001/api/auth/callback/google
-                  </p>
+                  <p className="mt-2 break-all text-sm text-foreground">{authCallbackUrl}</p>
                   <p className="mt-2 break-all text-sm text-muted">
-                    Optional helper: http://localhost:3001/auth/google/callback
+                    Optional helper: {helperCallbackUrl}
                   </p>
                 </div>
               </div>

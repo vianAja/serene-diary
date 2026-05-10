@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { CalendarDays, Settings } from "lucide-react";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { getHeaderDateLabel } from "@/lib/mock-data";
 import { getViewerProfile } from "@/lib/viewer-profile";
@@ -20,6 +21,20 @@ export async function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-3">
+            <Link
+              href="/calendar"
+              aria-label="Open calendar"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline/70 bg-white text-primary hover:bg-surface-soft"
+            >
+              <CalendarDays className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/settings"
+              aria-label="Open settings"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline/70 bg-white text-primary hover:bg-surface-soft"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
             <ProfileMenu profile={profile} />
           </div>
         </div>
@@ -32,7 +47,22 @@ export async function AppShell({ children }: { children: ReactNode }) {
           >
             SereneDiary
           </Link>
-          <span className="h-8 w-8" />
+          <div className="flex items-center gap-2">
+            <Link
+              href="/calendar"
+              aria-label="Open calendar"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-outline/70 bg-white text-primary"
+            >
+              <CalendarDays className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/settings"
+              aria-label="Open settings"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-outline/70 bg-white text-primary"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </header>
 

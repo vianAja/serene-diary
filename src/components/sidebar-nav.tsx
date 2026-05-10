@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   BookCheck,
+  CalendarClock,
   CalendarDays,
   CalendarRange,
   FileStack,
+  Settings,
 } from "lucide-react";
 
 const links = [
@@ -29,6 +31,16 @@ const links = [
     href: "/templates",
     label: "Templates",
     icon: FileStack,
+  },
+  {
+    href: "/calendar",
+    label: "Calendar",
+    icon: CalendarClock,
+  },
+  {
+    href: "/settings",
+    label: "Settings",
+    icon: Settings,
   },
 ];
 

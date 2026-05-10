@@ -64,3 +64,15 @@ export const checklistEntries = pgTable("checklist_entries", {
   position: integer("position").notNull(),
   completedAt: timestamp("completed_at", { withTimezone: true }),
 });
+
+export const scheduledTasks = pgTable("scheduled_tasks", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull().default("Scheduled"),
+  taskDate: date("task_date").notNull(),
+  window: text("window").notNull().default("Scheduled"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});

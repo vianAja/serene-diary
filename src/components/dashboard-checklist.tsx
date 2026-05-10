@@ -8,13 +8,18 @@ import { mergeActiveTemplateTasks } from "@/lib/template-storage";
 export function DashboardChecklist({
   initialTasks,
   initialTemplates,
+  scheduledTasks = [],
 }: {
   initialTasks: ChecklistTask[];
   initialTemplates: TemplateDefinition[];
+  scheduledTasks?: ChecklistTask[];
 }) {
   const [tasks, setTasks] = useState(() => {
     const mergedTasks = mergeActiveTemplateTasks(initialTemplates);
-    return mergedTasks.length > 0 ? mergedTasks : initialTasks;
+    if (mergedTasks.length > 0) {
+      return [...mergedTasks, ...scheduledTasks];
+    }
+    return initialTasks;
   });
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((task) => task.completed).length;

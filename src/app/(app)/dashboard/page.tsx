@@ -11,11 +11,27 @@ import {
   getDashboardStatus,
 } from "@/lib/mock-data";
 import { getTemplateLibrary } from "@/lib/template-library";
+import { getAuthorizedUserId } from "@/lib/authorized-user";
+import { getScheduledTasksByDate } from "@/lib/scheduled-tasks";
 
 export default async function DashboardPage() {
   const dashboard = getDailyDashboardSnapshot();
   const dbStatus = await getDashboardStatus();
   const templateLibrary = await getTemplateLibrary();
+  const userId = await getAuthorizedUserId();
+  const today = new Date().toISOString().slice(0, 10);
+  const scheduledTasks = userId ? await getScheduledTasksByDate(today, userId) : [];
+  const todayScheduledChecklist = scheduledTasks.map((task) => ({
+    id: task.id,
+    label: task.title,
+    category: task.category,
+    description: task.description,
+    completed: false,
+    color: "#47626c",
+    window: task.window,
+  }));
+
+  const todayChecklist = [...dashboard.checklist, ...todayScheduledChecklist];
 
   return (
     <div className="space-y-8">
@@ -143,8 +159,9 @@ export default async function DashboardPage() {
             </Link>
           </div>
           <DashboardChecklist
-            initialTasks={dashboard.checklist}
+            initialTasks={todayChecklist}
             initialTemplates={templateLibrary}
+            scheduledTasks={todayScheduledChecklist}
           />
         </section>
 

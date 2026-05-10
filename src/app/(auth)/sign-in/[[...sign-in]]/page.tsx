@@ -23,9 +23,6 @@ function getErrorMessage(error: string | undefined) {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const session = await getServerSession(authOptions);
-  const appUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3001";
-  const authCallbackUrl = `${appUrl}/api/auth/callback/google`;
-  const helperCallbackUrl = `${appUrl}/auth/google/callback`;
 
   if (session?.user?.email?.toLowerCase() === "najwanoctavian@gmail.com") {
     redirect("/dashboard");
@@ -66,23 +63,6 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                 SSO Only
               </span>
               <div className="h-px flex-1 bg-outline/30" />
-            </div>
-
-            <div className="space-y-4">
-              <div className="border-b border-outline/70 pb-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                  Allowed Email
-                </p>
-                <p className="mt-2 text-base text-foreground">
-                  najwanoctavian@gmail.com
-                </p>
-              </div>
-              <div className="border-b border-outline/70 pb-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                  Redirect URI
-                </p>
-                <p className="mt-2 break-all text-sm text-foreground">{authCallbackUrl}</p>
-              </div>
             </div>
 
             {errorMessage ? (
@@ -127,34 +107,9 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               </div>
 
               <div className="space-y-4">
-                <div className="border-b-2 border-[#e5e1da] pb-3">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-primary">
-                    Hanya Google SSO
-                  </p>
-                  <p className="mt-2 text-sm leading-7 text-muted">
-                    Sign-in is limited to the approved Google account on the
-                    allowlist. Any other email will be blocked automatically.
-                  </p>
-                </div>
-
-                <div className="border-b-2 border-[#e5e1da] pb-3">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-primary">
-                    Allowed Email
-                  </p>
-                  <p className="mt-2 text-sm text-foreground">
-                    najwanoctavian@gmail.com
-                  </p>
-                </div>
-
-                <div className="border-b-2 border-[#e5e1da] pb-3">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-primary">
-                    Redirect URI
-                  </p>
-                  <p className="mt-2 break-all text-sm text-foreground">{authCallbackUrl}</p>
-                  <p className="mt-2 break-all text-sm text-muted">
-                    Optional helper: {helperCallbackUrl}
-                  </p>
-                </div>
+                <p className="text-sm leading-7 text-muted">
+                  Sign in securely with your Google account to continue.
+                </p>
               </div>
 
               {errorMessage ? (

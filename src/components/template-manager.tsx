@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState, useTransition } from "react";
 import {
   Check,
   BriefcaseBusiness,
   Coffee,
+  Trash2,
   GripVertical,
   Pencil,
   Plus,
@@ -14,11 +14,7 @@ import {
   WandSparkles,
   X,
 } from "lucide-react";
-import type { TemplateDefinition, TemplateItem } from "@/lib/mock-data";
-import {
-  loadStoredTemplates,
-  saveStoredTemplates,
-} from "@/lib/template-storage";
+import type { TemplateDefinition } from "@/lib/mock-data";
 
 type InlineTemplateDraft = {
   name: string;
@@ -30,18 +26,7 @@ type TaskDraft = {
   description: string;
 };
 
-const blankTaskDraft: TaskDraft = {
-  label: "",
-  description: "",
-};
-
-function toTemplateId(name: string) {
-  return `template-${name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") || Date.now()}`;
-}
-
-function toItemId(label: string) {
-  return `item-${label.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") || Date.now()}`;
-}
+const blankTaskDraft: TaskDraft = { label: "", description: "" };
 
 function makeTemplateDraft(template: TemplateDefinition): InlineTemplateDraft {
   return {
@@ -71,43 +56,90 @@ export function TemplateManager({
 }: {
   initialTemplates: TemplateDefinition[];
 }) {
-  const [templates, setTemplates] = useState<TemplateDefinition[]>(() =>
-    loadStoredTemplates(initialTemplates),
+  const [templates, setTemplates] = useState<TemplateDefinition[]>(initialTemplates);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(
+    initialTemplates[0]?.id ?? "",
   );
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(() => {
-    const storedTemplates = loadStoredTemplates(initialTemplates);
-    return storedTemplates[0]?.id ?? initialTemplates[0].id;
-  });
   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
   const [editingDraft, setEditingDraft] = useState<InlineTemplateDraft | null>(null);
   const [newTemplateDraft, setNewTemplateDraft] =
     useState<InlineTemplateDraft | null>(null);
   const [isTaskComposerOpen, setIsTaskComposerOpen] = useState(false);
   const [taskDraft, setTaskDraft] = useState<TaskDraft>(blankTaskDraft);
-
-  useEffect(() => {
-    saveStoredTemplates(templates);
-  }, [templates]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const selectedTemplate =
     templates.find((template) => template.id === selectedTemplateId) ?? templates[0];
+
+  function applyTemplates(nextTemplates: TemplateDefinition[]) {
+    setTemplates(nextTemplates);
+    setSelectedTemplateId((currentSelectedTemplateId) => {
+      if (nextTemplates.some((template) => template.id === currentSelectedTemplateId)) {
+        return currentSelectedTemplateId;
+      }
+
+      return nextTemplates[0]?.id ?? "";
+    });
+  }
+
+  async function requestTemplates<T>(
+    input: string,
+    init?: RequestInit,
+  ): Promise<T> {
+    const response = await fetch(input, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        ...(init?.headers ?? {}),
+      },
+    });
+
+    const payload = (await response.json()) as T & { error?: string };
+
+    if (!response.ok) {
+      throw new Error(payload.error || "Unable to update templates.");
+    }
+
+    return payload;
+  }
 
   function selectTemplate(templateId: string) {
     setSelectedTemplateId(templateId);
     setEditingTemplateId(null);
     setEditingDraft(null);
     setIsTaskComposerOpen(false);
+    setErrorMessage(null);
   }
 
   function toggleTemplate(templateId: string) {
-    setTemplates((currentTemplates) =>
-      currentTemplates.map((template) =>
-        template.id === templateId
-          ? { ...template, active: !template.active }
-          : template,
-      ),
-    );
+    const targetTemplate = templates.find((template) => template.id === templateId);
+
+    if (!targetTemplate) {
+      return;
+    }
+
     setSelectedTemplateId(templateId);
+    setErrorMessage(null);
+
+    startTransition(async () => {
+      try {
+        const payload = await requestTemplates<{ templates: TemplateDefinition[] }>(
+          `/api/templates/${templateId}`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              active: !targetTemplate.active,
+            }),
+          },
+        );
+        applyTemplates(payload.templates);
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error ? error.message : "Unable to update template status.",
+        );
+      }
+    });
   }
 
   function startEditingTemplate(template: TemplateDefinition) {
@@ -122,23 +154,29 @@ export function TemplateManager({
       return;
     }
 
-    setTemplates((currentTemplates) =>
-      currentTemplates.map((template) =>
-        template.id === templateId
-          ? {
-              ...template,
-              name: editingDraft.name.trim(),
-              description:
-                editingDraft.description.trim() || template.description,
-              shortLabel:
-                editingDraft.name.trim().slice(0, 3).toUpperCase() ||
-                template.shortLabel,
-            }
-          : template,
-      ),
-    );
-    setEditingTemplateId(null);
-    setEditingDraft(null);
+    setErrorMessage(null);
+
+    startTransition(async () => {
+      try {
+        const payload = await requestTemplates<{ templates: TemplateDefinition[] }>(
+          `/api/templates/${templateId}`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              name: editingDraft.name,
+              description: editingDraft.description,
+            }),
+          },
+        );
+        applyTemplates(payload.templates);
+        setEditingTemplateId(null);
+        setEditingDraft(null);
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error ? error.message : "Unable to save template changes.",
+        );
+      }
+    });
   }
 
   function cancelEditingTemplate() {
@@ -163,24 +201,29 @@ export function TemplateManager({
     if (!newTemplateDraft || !newTemplateDraft.name.trim()) {
       return;
     }
+    setErrorMessage(null);
 
-    const nextTemplate: TemplateDefinition = {
-      id: toTemplateId(newTemplateDraft.name),
-      name: newTemplateDraft.name.trim(),
-      description:
-        newTemplateDraft.description.trim() ||
-        "A new template for structured daily checklist routines.",
-      focus: "General",
-      color: "#47626c",
-      shortLabel: newTemplateDraft.name.trim().slice(0, 3).toUpperCase() || "NEW",
-      frequency: "Daily",
-      active: false,
-      items: [],
-    };
-
-    setTemplates((currentTemplates) => [nextTemplate, ...currentTemplates]);
-    setSelectedTemplateId(nextTemplate.id);
-    setNewTemplateDraft(null);
+    startTransition(async () => {
+      try {
+        const payload = await requestTemplates<{ templates: TemplateDefinition[] }>(
+          "/api/templates",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              name: newTemplateDraft.name,
+              description: newTemplateDraft.description,
+            }),
+          },
+        );
+        applyTemplates(payload.templates);
+        setSelectedTemplateId(payload.templates[0]?.id ?? "");
+        setNewTemplateDraft(null);
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error ? error.message : "Unable to create a new template.",
+        );
+      }
+    });
   }
 
   function cancelNewTemplate() {
@@ -188,29 +231,57 @@ export function TemplateManager({
   }
 
   function addTaskToSelectedTemplate() {
-    if (!taskDraft.label.trim()) {
+    if (!taskDraft.label.trim() || !selectedTemplate) {
       return;
     }
 
-    const nextItem: TemplateItem = {
-      id: toItemId(taskDraft.label),
-      label: taskDraft.label.trim(),
-      description:
-        taskDraft.description.trim() ||
-        "Tuliskan detail singkat untuk task ini.",
-      category: "Checklist",
-      window: "Flexible",
-    };
+    setErrorMessage(null);
 
-    setTemplates((currentTemplates) =>
-      currentTemplates.map((template) =>
-        template.id === selectedTemplate.id
-          ? { ...template, items: [...template.items, nextItem] }
-          : template,
-      ),
-    );
-    setTaskDraft(blankTaskDraft);
-    setIsTaskComposerOpen(false);
+    startTransition(async () => {
+      try {
+        const payload = await requestTemplates<{ templates: TemplateDefinition[] }>(
+          `/api/templates/${selectedTemplate.id}/items`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              label: taskDraft.label,
+              description: taskDraft.description,
+            }),
+          },
+        );
+        applyTemplates(payload.templates);
+        setTaskDraft(blankTaskDraft);
+        setIsTaskComposerOpen(false);
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error ? error.message : "Unable to add a new task.",
+        );
+      }
+    });
+  }
+
+  function removeTemplate(templateId: string) {
+    setErrorMessage(null);
+
+    startTransition(async () => {
+      try {
+        const payload = await requestTemplates<{ templates: TemplateDefinition[] }>(
+          `/api/templates/${templateId}`,
+          {
+            method: "DELETE",
+          },
+        );
+        applyTemplates(payload.templates);
+        if (editingTemplateId === templateId) {
+          setEditingTemplateId(null);
+          setEditingDraft(null);
+        }
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error ? error.message : "Unable to delete the template.",
+        );
+      }
+    });
   }
 
   return (
@@ -231,6 +302,12 @@ export function TemplateManager({
           </div>
 
           <div className="space-y-4">
+            {errorMessage ? (
+              <div className="rounded-[16px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {errorMessage}
+              </div>
+            ) : null}
+
             {newTemplateDraft ? (
               <article className="rounded-[18px] border-2 border-primary bg-[#f4f8f9] p-4">
                 <div className="grid gap-3">
@@ -262,15 +339,17 @@ export function TemplateManager({
                     <button
                       type="button"
                       onClick={saveNewTemplate}
-                      className="rounded-full bg-primary p-2 text-white hover:bg-primary/90"
-                    >
+                    disabled={isPending}
+                    className="rounded-full bg-primary p-2 text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
                       <Check className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
                       onClick={cancelNewTemplate}
-                      className="rounded-full bg-surface-strong p-2 text-muted hover:bg-outline/40"
-                    >
+                    disabled={isPending}
+                    className="rounded-full bg-surface-strong p-2 text-muted hover:bg-outline/40 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
@@ -328,7 +407,8 @@ export function TemplateManager({
                               event.stopPropagation();
                               cancelEditingTemplate();
                             }}
-                            className="rounded-full bg-surface-strong p-2 text-muted hover:bg-outline/40"
+                            disabled={isPending}
+                            className="rounded-full bg-surface-strong p-2 text-muted hover:bg-outline/40 disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             <X className="h-4 w-4" />
                           </button>
@@ -338,40 +418,56 @@ export function TemplateManager({
                               event.stopPropagation();
                               saveEditedTemplate(template.id);
                             }}
-                            className="rounded-full bg-primary p-2 text-white hover:bg-primary/90"
+                            disabled={isPending}
+                            className="rounded-full bg-primary p-2 text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             <Check className="h-4 w-4" />
                           </button>
                         </>
                       ) : (
-                        <button
-                          type="button"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            startEditingTemplate(template);
-                          }}
-                          className="rounded-full bg-surface-strong p-2 text-primary hover:bg-secondary"
-                        >
-                          <SquarePen className="h-4 w-4" />
-                        </button>
+                        <>
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              removeTemplate(template.id);
+                            }}
+                            disabled={isPending}
+                            className="rounded-full bg-surface-strong p-2 text-muted hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              startEditingTemplate(template);
+                            }}
+                            disabled={isPending}
+                            className="rounded-full bg-surface-strong p-2 text-primary hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            <SquarePen className="h-4 w-4" />
+                          </button>
+                          <button
+                            type="button"
+                            aria-pressed={template.active}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              toggleTemplate(template.id);
+                            }}
+                            disabled={isPending}
+                            className={`flex h-6 w-11 shrink-0 items-center rounded-full p-1 disabled:cursor-not-allowed disabled:opacity-60 ${
+                              template.active ? "bg-primary" : "bg-outline/70"
+                            }`}
+                          >
+                            <span
+                              className={`h-4 w-4 rounded-full bg-white transition-transform ${
+                                template.active ? "translate-x-5" : ""
+                              }`}
+                            />
+                          </button>
+                        </>
                       )}
-                      <button
-                        type="button"
-                        aria-pressed={template.active}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          toggleTemplate(template.id);
-                        }}
-                        className={`flex h-6 w-11 items-center rounded-full p-1 ${
-                          template.active ? "bg-primary" : "bg-outline/70"
-                        }`}
-                      >
-                        <span
-                          className={`h-4 w-4 rounded-full bg-white transition-transform ${
-                            template.active ? "translate-x-5" : ""
-                          }`}
-                        />
-                      </button>
                     </div>
                   </div>
 
@@ -410,26 +506,22 @@ export function TemplateManager({
           </div>
         </div>
 
-        <div className="relative h-48 overflow-hidden rounded-[20px] shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
-          <Image
-            alt="Mindful workspace"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVjqj79g1V45Q1wtW-YJB8Jxngtv4cjjBypDEBVHua5M6vQv6io37VRMfCfHcohWOJcyHJcpXrPCjema4yR3Pxc3vyJCeWWQxwZTuTzJMA2K0Z3hneCZ7N0r-YkgwfR-Uc2wFNI8aKIaFPny76V3wBMuz1MGsxAK5wnkBD8UJXtJpyQ_tROHEsbj9dFMkaUDVdezRkFfBPNsYOQasLYZOdHZKGOKUlJQEe4V_SjnVJsYXv7hGXO-Zvtz66AlNdAUirbwMmpzP5gW2k"
-            fill
-            sizes="(max-width: 1024px) 100vw, 40vw"
-            className="object-cover transition-transform duration-700 hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
-            <div className="absolute bottom-6">
-              <p className="text-[20px] font-semibold">Build Better Habits</p>
-              <p className="mt-2 max-w-xs text-sm leading-6 text-white/80">
-                Templates help you stay consistent with your daily routines and reflection habits.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="lg:col-span-7">
+        {!selectedTemplate ? (
+          <section className="rounded-[24px] border border-outline/70 bg-white p-10 text-center shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted">
+              Template Editor
+            </p>
+            <h3 className="mt-3 text-3xl font-semibold text-foreground">
+              No template selected
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-muted">
+              Create a new template from the left panel to start building your checklist structure.
+            </p>
+          </section>
+        ) : (
         <section className="rounded-[24px] border border-outline/70 bg-white p-6 shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
           <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -444,7 +536,8 @@ export function TemplateManager({
               <button
                 type="button"
                 onClick={cancelEditingTemplate}
-                className="rounded-full bg-surface-strong p-3 text-muted hover:bg-outline/40"
+                disabled={isPending}
+                className="rounded-full bg-surface-strong p-3 text-muted hover:bg-outline/40 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -455,7 +548,8 @@ export function TemplateManager({
                     saveEditedTemplate(selectedTemplate.id);
                   }
                 }}
-                className="rounded-full bg-primary p-3 text-white hover:bg-primary/90"
+                disabled={isPending || editingTemplateId !== selectedTemplate.id}
+                className="rounded-full bg-primary p-3 text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Check className="h-4 w-4" />
               </button>
@@ -530,14 +624,16 @@ export function TemplateManager({
                     <button
                       type="button"
                       onClick={() => setIsTaskComposerOpen(false)}
-                      className="rounded-full bg-surface-strong p-2 text-muted hover:bg-outline/40"
-                    >
+                    disabled={isPending}
+                    className="rounded-full bg-surface-strong p-2 text-muted hover:bg-outline/40 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
                       <X className="h-4 w-4" />
                     </button>
                     <button
                       type="button"
                       onClick={addTaskToSelectedTemplate}
-                      className="rounded-full bg-primary p-2 text-white hover:bg-primary/90"
+                      disabled={isPending}
+                      className="rounded-full bg-primary p-2 text-white hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <Check className="h-4 w-4" />
                     </button>
@@ -547,6 +643,7 @@ export function TemplateManager({
             )}
           </div>
         </section>
+        )}
       </div>
     </div>
   );

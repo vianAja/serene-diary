@@ -1,10 +1,13 @@
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import { neonConfig, Pool } from "@neondatabase/serverless";
+import ws from "ws";
 import * as schema from "@/lib/db/schema";
 
+neonConfig.webSocketConstructor = ws;
+
 function createDatabase(connectionString: string) {
-  const sql = neon(connectionString);
-  return drizzle({ client: sql, schema });
+  const pool = new Pool({ connectionString });
+  return drizzle({ client: pool, schema });
 }
 
 let database: ReturnType<typeof createDatabase> | null = null;

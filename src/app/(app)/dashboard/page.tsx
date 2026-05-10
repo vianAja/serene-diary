@@ -9,13 +9,13 @@ import { DashboardChecklist } from "@/components/dashboard-checklist";
 import {
   getDailyDashboardSnapshot,
   getDashboardStatus,
-  getTemplateManagementSnapshot,
 } from "@/lib/mock-data";
+import { getTemplateLibrary } from "@/lib/template-library";
 
 export default async function DashboardPage() {
   const dashboard = getDailyDashboardSnapshot();
   const dbStatus = await getDashboardStatus();
-  const templateSnapshot = getTemplateManagementSnapshot();
+  const templateLibrary = await getTemplateLibrary();
 
   return (
     <div className="space-y-8">
@@ -144,7 +144,7 @@ export default async function DashboardPage() {
           </div>
           <DashboardChecklist
             initialTasks={dashboard.checklist}
-            initialTemplates={templateSnapshot.templates}
+            initialTemplates={templateLibrary}
           />
         </section>
 

@@ -3,10 +3,7 @@
 import { startTransition, useState } from "react";
 import { CheckCheck } from "lucide-react";
 import type { ChecklistTask, TemplateDefinition } from "@/lib/mock-data";
-import {
-  loadStoredTemplates,
-  mergeActiveTemplateTasks,
-} from "@/lib/template-storage";
+import { mergeActiveTemplateTasks } from "@/lib/template-storage";
 
 export function DashboardChecklist({
   initialTasks,
@@ -16,8 +13,7 @@ export function DashboardChecklist({
   initialTemplates: TemplateDefinition[];
 }) {
   const [tasks, setTasks] = useState(() => {
-    const storedTemplates = loadStoredTemplates(initialTemplates);
-    const mergedTasks = mergeActiveTemplateTasks(storedTemplates);
+    const mergedTasks = mergeActiveTemplateTasks(initialTemplates);
     return mergedTasks.length > 0 ? mergedTasks : initialTasks;
   });
   const totalTasks = tasks.length;

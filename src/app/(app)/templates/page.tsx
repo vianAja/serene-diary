@@ -1,8 +1,8 @@
-import { getTemplateManagementSnapshot } from "@/lib/mock-data";
+import { getTemplateLibrary } from "@/lib/template-library";
 import { TemplateManager } from "@/components/template-manager";
 
-export default function TemplatesPage() {
-  const snapshot = getTemplateManagementSnapshot();
+export default async function TemplatesPage() {
+  const templates = await getTemplateLibrary();
 
   return (
     <div className="space-y-8">
@@ -14,7 +14,7 @@ export default function TemplatesPage() {
           Personalize your daily structure with reusable checklist templates.
         </p>
       </header>
-      <TemplateManager initialTemplates={snapshot.templates} />
+      <TemplateManager initialTemplates={templates} />
     </div>
   );
 }

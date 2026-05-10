@@ -1,11 +1,5 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import {
-  Bell,
-  CalendarDays,
-  CircleHelp,
-  Settings,
-} from "lucide-react";
 import { SidebarNav } from "@/components/sidebar-nav";
 import { getHeaderDateLabel } from "@/lib/mock-data";
 import { getViewerProfile } from "@/lib/viewer-profile";
@@ -26,12 +20,6 @@ export async function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="rounded-full p-2 text-muted hover:bg-surface-soft">
-              <CalendarDays className="h-4 w-4" />
-            </button>
-            <button className="rounded-full p-2 text-muted hover:bg-surface-soft">
-              <Bell className="h-4 w-4" />
-            </button>
             <ProfileMenu profile={profile} />
           </div>
         </div>
@@ -44,9 +32,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
           >
             SereneDiary
           </Link>
-          <button className="rounded-full p-2 text-muted hover:bg-surface-soft">
-            <Settings className="h-5 w-5" />
-          </button>
+          <span className="h-8 w-8" />
         </div>
       </header>
 
@@ -56,27 +42,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
           <p className="text-sm text-muted">Stay mindful today</p>
         </div>
 
-        <div className="px-4 pb-6">
-          <button className="flex w-full items-center gap-3 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-primary/90">
-            <span className="text-lg">+</span>
-            <span>New Entry</span>
-          </button>
-        </div>
-
         <SidebarNav />
-
-        <div className="mt-auto border-t border-outline/40 px-4 py-4">
-          <div className="space-y-2">
-            <button className="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-sm text-muted hover:bg-surface-soft">
-              <Settings className="h-4 w-4" />
-              <span>Settings</span>
-            </button>
-            <button className="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-sm text-muted hover:bg-surface-soft">
-              <CircleHelp className="h-4 w-4" />
-              <span>Help</span>
-            </button>
-          </div>
-        </div>
       </aside>
 
       <div className="md:ml-64">

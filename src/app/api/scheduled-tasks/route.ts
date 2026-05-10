@@ -3,6 +3,7 @@ import { getAuthorizedUserId } from "@/lib/authorized-user";
 import {
   createScheduledTask,
   deleteScheduledTask,
+  getScheduledTasksForRange,
   getScheduledTasksByDate,
 } from "@/lib/scheduled-tasks";
 
@@ -15,6 +16,13 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const taskDate = searchParams.get("date");
+  const startDate = searchParams.get("startDate");
+  const endDate = searchParams.get("endDate");
+
+  if (startDate && endDate) {
+    const tasks = await getScheduledTasksForRange(startDate, endDate, userId);
+    return NextResponse.json({ tasks });
+  }
 
   if (!taskDate) {
     return NextResponse.json({ tasks: [] });

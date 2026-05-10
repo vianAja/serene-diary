@@ -10,6 +10,7 @@ import {
 export const checklistTemplates = pgTable("checklist_templates", {
   id: text("id").primaryKey(),
   userId: text("user_id").notNull(),
+  position: integer("position").notNull().default(0),
   name: text("name").notNull(),
   description: text("description").notNull(),
   focus: text("focus").notNull(),
@@ -17,6 +18,14 @@ export const checklistTemplates = pgTable("checklist_templates", {
   shortLabel: text("short_label").notNull(),
   frequency: text("frequency").notNull(),
   isActive: boolean("is_active").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const allowedUsers = pgTable("allowed_users", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  isActive: boolean("is_active").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

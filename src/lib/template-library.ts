@@ -55,9 +55,10 @@ async function seedDefaultTemplates(userId: string) {
   const timestamp = new Date();
 
   await db.insert(checklistTemplates).values(
-    templates.map((template) => ({
+    templates.map((template, index) => ({
       id: template.id,
       userId,
+      position: index,
       name: template.name,
       description: template.description,
       focus: template.focus,
@@ -129,7 +130,7 @@ export async function getTemplateLibrary(userId = defaultUserId) {
     .select()
     .from(checklistTemplates)
     .where(eq(checklistTemplates.userId, userId))
-    .orderBy(desc(checklistTemplates.createdAt));
+    .orderBy(asc(checklistTemplates.position), desc(checklistTemplates.createdAt));
 
   if (templatesRows.length === 0) {
     return seedDefaultTemplates(userId);
@@ -174,6 +175,7 @@ export async function createTemplate(
   const nextTemplate = {
     id: buildTemplateId(trimmedName),
     userId,
+    position: -1,
     name: trimmedName,
     description:
       trimmedDescription || "A new template for structured daily checklist routines.",

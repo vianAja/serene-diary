@@ -1,7 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import Google from "next-auth/providers/google";
-
-const allowedEmail = (process.env.ALLOWED_EMAIL ?? "").toLowerCase();
+import { isEmailAllowed } from "@/lib/allowed-users";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
@@ -33,7 +32,9 @@ export const authOptions: NextAuthOptions = {
         return "/sign-in?error=MissingEmail";
       }
 
-      if (email !== allowedEmail) {
+      const allowed = await isEmailAllowed(email);
+
+      if (!allowed) {
         return "/sign-in?error=AccessDenied";
       }
 

@@ -1,14 +1,11 @@
 import Link from "next/link";
 import {
-  ArrowRight,
-  CalendarClock,
   Flame,
   Sparkles,
 } from "lucide-react";
 import { DashboardChecklist } from "@/components/dashboard-checklist";
 import {
   getDailyDashboardSnapshot,
-  getDashboardStatus,
 } from "@/lib/mock-data";
 import { getTemplateLibrary } from "@/lib/template-library";
 import { getAuthorizedUserId } from "@/lib/authorized-user";
@@ -16,7 +13,6 @@ import { getScheduledTasksByDate } from "@/lib/scheduled-tasks";
 
 export default async function DashboardPage() {
   const dashboard = getDailyDashboardSnapshot();
-  const dbStatus = await getDashboardStatus();
   const templateLibrary = await getTemplateLibrary();
   const userId = await getAuthorizedUserId();
   const today = new Date().toISOString().slice(0, 10);
@@ -133,31 +129,12 @@ export default async function DashboardPage() {
               <p className="mt-3 text-3xl font-bold">{dashboard.streakDays}</p>
               <p className="text-sm text-muted">days in a row</p>
             </div>
-            <div className="surface-card rounded-[24px] p-4">
-              <div className="flex items-center gap-2 text-primary">
-                <CalendarClock className="h-4 w-4" />
-                <span className="text-xs font-semibold uppercase tracking-[0.22em]">
-                  Status
-                </span>
-              </div>
-              <p className="mt-3 text-base font-semibold">{dbStatus.label}</p>
-              <p className="text-sm text-muted">{dbStatus.description}</p>
-            </div>
           </div>
         </div>
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
         <section className="surface-card fade-up rounded-[24px] p-4 md:rounded-[30px] md:p-7">
-          <div className="mb-6 hidden justify-end md:flex">
-            <Link
-              href="/templates"
-              className="inline-flex items-center gap-2 rounded-full border border-outline bg-surface-soft px-4 py-2 text-sm font-semibold text-primary hover:-translate-y-0.5 hover:border-primary-soft"
-            >
-              Manage Templates
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
           <DashboardChecklist
             initialTasks={todayChecklist}
             initialTemplates={templateLibrary}
@@ -166,20 +143,6 @@ export default async function DashboardPage() {
         </section>
 
         <aside className="grid gap-6">
-          <section className="surface-card fade-up rounded-[30px] p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
-              Checklist Source
-            </p>
-            <h3 className="mt-3 text-2xl font-semibold text-primary">
-              Multiple templates can merge
-            </h3>
-            <p className="mt-2 text-sm leading-7 text-muted">
-              Activate one or more templates from the template management page,
-              and the active tasks will automatically merge into the main
-              checklist on the dashboard.
-            </p>
-          </section>
-
           <section className="surface-card fade-up rounded-[30px] p-6">
             <div className="flex items-center justify-between">
               <div>

@@ -25,13 +25,6 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", nextUrl));
   }
 
-  const email = token.email.toLowerCase();
-  const allowedEmail = (process.env.ALLOWED_EMAIL ?? "").toLowerCase();
-
-  if (!email || email !== allowedEmail) {
-    return NextResponse.redirect(new URL("/sign-in?error=AccessDenied", nextUrl));
-  }
-
   return NextResponse.next();
 }
 

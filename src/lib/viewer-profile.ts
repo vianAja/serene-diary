@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/auth";
+import { isEmailAllowed } from "@/lib/allowed-users";
 
 export type ViewerProfile = {
   name: string;
@@ -39,6 +40,7 @@ export async function getViewerProfile(): Promise<ViewerProfile> {
 
   const displayName = session.user.name || session.user.email || "Authenticated User";
   const email = session.user.email || "Email unavailable";
+  const allowed = email === "Email unavailable" ? false : await isEmailAllowed(email);
 
   return {
     name: displayName,
@@ -46,7 +48,7 @@ export async function getViewerProfile(): Promise<ViewerProfile> {
     initials: getInitials(displayName),
     authLabel: "Google SSO",
     authDescription:
-      email.toLowerCase() === (process.env.ALLOWED_EMAIL ?? "").toLowerCase()
+      allowed
         ? "Access granted through the approved email allowlist."
         : "This email is not included in the approved allowlist.",
     avatarUrl: session.user.image ?? null,

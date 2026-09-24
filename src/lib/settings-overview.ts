@@ -18,28 +18,39 @@ export async function getSettingsOverview() {
     };
   }
 
-  const allUsers = await db
-    .select({
-      value: countDistinct(checklistTemplates.userId),
-    })
-    .from(checklistTemplates);
+  try {
+    const allUsers = await db
+      .select({
+        value: countDistinct(checklistTemplates.userId),
+      })
+      .from(checklistTemplates);
 
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-  const activeUsers = await db
-    .select({
-      value: countDistinct(checklistTemplates.userId),
-    })
-    .from(checklistTemplates)
-    .where(gte(checklistTemplates.updatedAt, sevenDaysAgo));
+    const activeUsers = await db
+      .select({
+        value: countDistinct(checklistTemplates.userId),
+      })
+      .from(checklistTemplates)
+      .where(gte(checklistTemplates.updatedAt, sevenDaysAgo));
 
-  const allowedUsers = await listAllowedUsers();
+    const allowedUsers = await listAllowedUsers();
 
-  return {
-    profile,
-    totalUsers: allUsers[0]?.value ?? 0,
-    activeUsers: activeUsers[0]?.value ?? 0,
-    allowedUsers,
-  };
+    return {
+      profile,
+      totalUsers: allUsers[0]?.value ?? 0,
+      activeUsers: activeUsers[0]?.value ?? 0,
+      allowedUsers,
+    };
+  } catch (error) {
+    console.error("Failed to get settings overview from DB:", error);
+    const allowedUsers = await listAllowedUsers();
+    return {
+      profile,
+      totalUsers: 1,
+      activeUsers: profile.signedIn ? 1 : 0,
+      allowedUsers,
+    };
+  }
 }

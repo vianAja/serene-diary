@@ -54,36 +54,40 @@ async function seedDefaultTemplates(userId: string) {
   const templates = cloneDefaultTemplates();
   const timestamp = new Date();
 
-  await db.insert(checklistTemplates).values(
-    templates.map((template, index) => ({
-      id: template.id,
-      userId,
-      position: index,
-      name: template.name,
-      description: template.description,
-      focus: template.focus,
-      color: template.color,
-      shortLabel: template.shortLabel,
-      frequency: template.frequency,
-      isActive: template.active,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    })),
-  );
-
-  await db.insert(templateChecklistItems).values(
-    templates.flatMap((template) =>
-      template.items.map((item, index) => ({
-        id: item.id,
-        templateId: template.id,
-        label: item.label,
-        category: item.category,
-        description: item.description,
-        window: item.window,
+  try {
+    await db.insert(checklistTemplates).values(
+      templates.map((template, index) => ({
+        id: template.id,
+        userId,
         position: index,
+        name: template.name,
+        description: template.description,
+        focus: template.focus,
+        color: template.color,
+        shortLabel: template.shortLabel,
+        frequency: template.frequency,
+        isActive: template.active,
+        createdAt: timestamp,
+        updatedAt: timestamp,
       })),
-    ),
-  );
+    );
+
+    await db.insert(templateChecklistItems).values(
+      templates.flatMap((template) =>
+        template.items.map((item, index) => ({
+          id: item.id,
+          templateId: template.id,
+          label: item.label,
+          category: item.category,
+          description: item.description,
+          window: item.window,
+          position: index,
+        })),
+      ),
+    );
+  } catch (error) {
+    console.error("Failed to seed default templates to DB:", error);
+  }
 
   return templates;
 }
@@ -126,30 +130,35 @@ export async function getTemplateLibrary(userId = defaultUserId) {
     return cloneDefaultTemplates();
   }
 
-  const templatesRows = await db
-    .select()
-    .from(checklistTemplates)
-    .where(eq(checklistTemplates.userId, userId))
-    .orderBy(asc(checklistTemplates.position), desc(checklistTemplates.createdAt));
+  try {
+    const templatesRows = await db
+      .select()
+      .from(checklistTemplates)
+      .where(eq(checklistTemplates.userId, userId))
+      .orderBy(asc(checklistTemplates.position), desc(checklistTemplates.createdAt));
 
-  if (templatesRows.length === 0) {
-    return seedDefaultTemplates(userId);
+    if (templatesRows.length === 0) {
+      return await seedDefaultTemplates(userId);
+    }
+
+    const templateIds = templatesRows.map((template) => template.id);
+    const itemsRows =
+      templateIds.length === 0
+        ? []
+        : await db
+            .select()
+            .from(templateChecklistItems)
+            .where(inArray(templateChecklistItems.templateId, templateIds))
+            .orderBy(
+              asc(templateChecklistItems.templateId),
+              asc(templateChecklistItems.position),
+            );
+
+    return mapTemplates(templatesRows, itemsRows);
+  } catch (error) {
+    console.error("Failed to fetch template library from DB:", error);
+    return cloneDefaultTemplates();
   }
-
-  const templateIds = templatesRows.map((template) => template.id);
-  const itemsRows =
-    templateIds.length === 0
-      ? []
-      : await db
-          .select()
-          .from(templateChecklistItems)
-          .where(inArray(templateChecklistItems.templateId, templateIds))
-          .orderBy(
-            asc(templateChecklistItems.templateId),
-            asc(templateChecklistItems.position),
-          );
-
-  return mapTemplates(templatesRows, itemsRows);
 }
 
 export async function createTemplate(

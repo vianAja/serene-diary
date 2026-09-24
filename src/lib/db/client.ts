@@ -13,9 +13,13 @@ function createDatabase(connectionString: string) {
 let database: ReturnType<typeof createDatabase> | null = null;
 
 export function getDb() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = process.env.DATABASE_URL?.trim();
 
-  if (!connectionString) {
+  if (
+    !connectionString ||
+    (!connectionString.startsWith("postgres://") &&
+      !connectionString.startsWith("postgresql://"))
+  ) {
     return null;
   }
 

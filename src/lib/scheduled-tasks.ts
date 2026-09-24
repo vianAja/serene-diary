@@ -24,16 +24,21 @@ export async function getScheduledTasksByDate(taskDate: string, userId = fallbac
     return [];
   }
 
-  return db
-    .select()
-    .from(scheduledTasks)
-    .where(
-      and(
-        eq(scheduledTasks.userId, userId),
-        eq(scheduledTasks.taskDate, dateValue),
-      ),
-    )
-    .orderBy(asc(scheduledTasks.createdAt));
+  try {
+    return await db
+      .select()
+      .from(scheduledTasks)
+      .where(
+        and(
+          eq(scheduledTasks.userId, userId),
+          eq(scheduledTasks.taskDate, dateValue),
+        ),
+      )
+      .orderBy(asc(scheduledTasks.createdAt));
+  } catch (error) {
+    console.error("Failed to get scheduled tasks by date:", error);
+    return [];
+  }
 }
 
 export async function getScheduledTasksForRange(
@@ -50,12 +55,18 @@ export async function getScheduledTasksForRange(
   const start = normalizeDate(startDate);
   const end = normalizeDate(endDate);
 
-  return db
-    .select()
-    .from(scheduledTasks)
-    .where(and(eq(scheduledTasks.userId, userId)))
-    .orderBy(desc(scheduledTasks.taskDate), desc(scheduledTasks.createdAt))
-    .then((rows) => rows.filter((row) => row.taskDate >= start && row.taskDate <= end));
+  try {
+    const rows = await db
+      .select()
+      .from(scheduledTasks)
+      .where(and(eq(scheduledTasks.userId, userId)))
+      .orderBy(desc(scheduledTasks.taskDate), desc(scheduledTasks.createdAt));
+
+    return rows.filter((row) => row.taskDate >= start && row.taskDate <= end);
+  } catch (error) {
+    console.error("Failed to get scheduled tasks for range:", error);
+    return [];
+  }
 }
 
 export async function createScheduledTask(

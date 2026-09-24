@@ -4,7 +4,7 @@ import { getToken } from "next-auth/jwt";
 
 const publicRoutes = ["/sign-in", "/login", "/auth/google/callback"];
 
-export default async function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
 

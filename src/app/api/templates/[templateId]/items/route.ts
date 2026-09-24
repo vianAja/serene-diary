@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthorizedUserId } from "@/lib/authorized-user";
-import { createTemplateItem } from "@/lib/template-library";
+import { createTemplateItem, deleteTemplateItem } from "@/lib/template-library";
 
 type RouteContext = {
   params: Promise<{
@@ -39,3 +39,26 @@ export async function POST(request: Request, context: RouteContext) {
 
   return NextResponse.json({ templates });
 }
+
+export async function DELETE(request: Request, context: RouteContext) {
+  const userId = await getAuthorizedUserId();
+
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { templateId } = await context.params;
+  const { searchParams } = new URL(request.url);
+  const itemId = searchParams.get("itemId");
+
+  if (!itemId) {
+    return NextResponse.json(
+      { error: "Item id is required." },
+      { status: 400 },
+    );
+  }
+
+  const templates = await deleteTemplateItem(templateId, itemId, userId);
+  return NextResponse.json({ templates });
+}
+

@@ -10,8 +10,8 @@ import { mergeActiveTemplateTasks } from "@/lib/template-storage";
 
 export default async function DashboardPage() {
   const dashboard = getDailyDashboardSnapshot();
-  const templateLibrary = await getTemplateLibrary();
   const userId = await getAuthorizedUserId();
+  const templateLibrary = await getTemplateLibrary(userId ?? undefined);
   const today = new Date().toISOString().slice(0, 10);
 
   const scheduledTasks = userId ? await getScheduledTasksByDate(today, userId) : [];
@@ -33,6 +33,14 @@ export default async function DashboardPage() {
   // Load persisted completed state from DB (empty object if no DB)
   const persistedEntries = userId ? await loadDailyEntries(userId, today) : {};
 
+  // Compute live progress based on persisted database state
+  const completedCount = todayChecklist.filter(
+    (task) => persistedEntries[task.id] ?? task.completed,
+  ).length;
+  const totalCount = todayChecklist.length;
+  const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+  const progressLabel = `${progressPercent}%`;
+
   return (
     <div className="space-y-8">
       <section className="space-y-4 md:hidden">
@@ -50,18 +58,17 @@ export default async function DashboardPage() {
                 Daily Intentions
               </p>
               <p className="mt-2 text-2xl font-semibold text-primary">
-                {dashboard.progressLabel} Completed
+                {progressLabel} Completed
               </p>
             </div>
             <p className="text-base font-medium text-muted">
-              {dashboard.checklist.filter((task) => task.completed).length} of{" "}
-              {dashboard.checklist.length}
+              {completedCount} of {totalCount}
             </p>
           </div>
           <div className="mt-4 h-3 overflow-hidden rounded-full bg-surface-strong">
             <div
               className="h-full rounded-full bg-primary"
-              style={{ width: `${dashboard.progress}%` }}
+              style={{ width: `${progressPercent}%` }}
             />
           </div>
         </article>
@@ -112,16 +119,17 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-between text-sm text-muted">
               <span>Checklist Progress</span>
               <span className="font-semibold text-primary">
-                {dashboard.progressLabel}
+                {progressLabel}
               </span>
             </div>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-secondary/60">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-primary-soft to-primary"
-                style={{ width: `${dashboard.progress}%` }}
+                style={{ width: `${progressPercent}%` }}
               />
             </div>
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="surface-card rounded-[24px] p-4">
               <div className="flex items-center gap-2 text-primary">

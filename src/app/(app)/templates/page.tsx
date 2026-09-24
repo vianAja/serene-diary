@@ -1,8 +1,10 @@
 import { getTemplateLibrary } from "@/lib/template-library";
 import { TemplateManager } from "@/components/template-manager";
+import { getAuthorizedUserId } from "@/lib/authorized-user";
 
 export default async function TemplatesPage() {
-  const templates = await getTemplateLibrary();
+  const userId = await getAuthorizedUserId();
+  const templates = await getTemplateLibrary(userId ?? undefined);
 
   return (
     <div className="space-y-8">

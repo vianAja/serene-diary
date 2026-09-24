@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { getAuthorizedUserId } from "@/lib/authorized-user";
+import { loadWeeklyEntries } from "@/lib/daily-checklist";
 import { getScheduledTasksForRange } from "@/lib/scheduled-tasks";
 import { getTemplateLibrary } from "@/lib/template-library";
 import { mergeActiveTemplateTasks } from "@/lib/template-storage";
@@ -32,22 +33,34 @@ export default async function WeeklyReportPage() {
   const days = getWeekDays();
   const weekStart = days[0]?.iso;
   const weekEnd = days[6]?.iso;
-  const templates = await getTemplateLibrary();
-  const activeTasks = mergeActiveTemplateTasks(templates);
   const userId = await getAuthorizedUserId();
+  const templates = await getTemplateLibrary(userId ?? undefined);
+  const activeTasks = mergeActiveTemplateTasks(templates);
   const scheduledTasks =
     userId && weekStart && weekEnd
       ? await getScheduledTasksForRange(weekStart, weekEnd, userId)
       : [];
 
+  const weeklyEntries = userId
+    ? await loadWeeklyEntries(
+        userId,
+        days.map((d) => d.iso),
+      )
+    : {};
+
   const rowMap = new Map<string, { name: string; color: string; completion: boolean[] }>();
 
   for (const task of activeTasks) {
     if (!rowMap.has(task.label)) {
+      const completion = days.map((day) => {
+        const dayEntries = weeklyEntries[day.iso] ?? {};
+        return !!(dayEntries[task.id] || dayEntries[task.label]);
+      });
+
       rowMap.set(task.label, {
         name: task.label,
         color: task.color,
-        completion: [true, true, true, true, true, true, true],
+        completion,
       });
     }
   }
@@ -58,12 +71,15 @@ export default async function WeeklyReportPage() {
       continue;
     }
 
+    const dayEntries = weeklyEntries[task.taskDate] ?? {};
+    const isCompleted = !!(dayEntries[task.id] || dayEntries[task.title]);
+
     const existing = rowMap.get(task.title);
     if (existing) {
-      existing.completion[dayIndex] = true;
+      existing.completion[dayIndex] = isCompleted;
     } else {
       const completion = [false, false, false, false, false, false, false];
-      completion[dayIndex] = true;
+      completion[dayIndex] = isCompleted;
       rowMap.set(task.title, {
         name: task.title,
         color: "#7d6a8b",

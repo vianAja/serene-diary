@@ -344,3 +344,47 @@ export async function createTemplateItem(
 
   return getTemplateLibrary(userId);
 }
+
+export async function deleteTemplateItem(
+  templateId: string,
+  itemId: string,
+  userId = defaultUserId,
+) {
+  const db = getDb();
+
+  if (!db) {
+    return getTemplateLibrary(userId);
+  }
+
+  const template = await db
+    .select()
+    .from(checklistTemplates)
+    .where(
+      and(
+        eq(checklistTemplates.id, templateId),
+        eq(checklistTemplates.userId, userId),
+      ),
+    )
+    .limit(1);
+
+  if (template.length === 0) {
+    return getTemplateLibrary(userId);
+  }
+
+  await db
+    .delete(templateChecklistItems)
+    .where(
+      and(
+        eq(templateChecklistItems.id, itemId),
+        eq(templateChecklistItems.templateId, templateId),
+      ),
+    );
+
+  await db
+    .update(checklistTemplates)
+    .set({ updatedAt: new Date() })
+    .where(eq(checklistTemplates.id, templateId));
+
+  return getTemplateLibrary(userId);
+}
+

@@ -260,6 +260,25 @@ export function TemplateManager({
     });
   }
 
+  function removeItemFromSelectedTemplate(itemId: string) {
+    if (!selectedTemplate) return;
+    setErrorMessage(null);
+
+    startTransition(async () => {
+      try {
+        const payload = await requestTemplates<{ templates: TemplateDefinition[] }>(
+          `/api/templates/${selectedTemplate.id}/items?itemId=${itemId}`,
+          { method: "DELETE" },
+        );
+        applyTemplates(payload.templates);
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error ? error.message : "Unable to delete template task.",
+        );
+      }
+    });
+  }
+
   function removeTemplate(templateId: string) {
     setErrorMessage(null);
 
@@ -576,9 +595,17 @@ export function TemplateManager({
                     {item.description}
                   </p>
                 </div>
-                <button className="rounded-full p-2 text-muted opacity-0 transition-all hover:bg-surface-strong group-hover:opacity-100">
-                  <Pencil className="h-4 w-4" />
-                </button>
+                <div className="flex items-center gap-1 opacity-0 transition-all group-hover:opacity-100">
+                  <button
+                    type="button"
+                    onClick={() => removeItemFromSelectedTemplate(item.id)}
+                    disabled={isPending}
+                    className="rounded-full p-2 text-muted transition-all hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                    title="Delete item"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             ))}
 

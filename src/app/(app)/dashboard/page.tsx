@@ -1,21 +1,19 @@
 import Link from "next/link";
-import {
-  Flame,
-  Sparkles,
-} from "lucide-react";
+import { Flame, Sparkles } from "lucide-react";
 import { DashboardChecklist } from "@/components/dashboard-checklist";
-import {
-  getDailyDashboardSnapshot,
-} from "@/lib/mock-data";
+import { getDailyDashboardSnapshot } from "@/lib/mock-data";
 import { getTemplateLibrary } from "@/lib/template-library";
 import { getAuthorizedUserId } from "@/lib/authorized-user";
 import { getScheduledTasksByDate } from "@/lib/scheduled-tasks";
+import { loadDailyEntries } from "@/lib/daily-checklist";
+import { mergeActiveTemplateTasks } from "@/lib/template-storage";
 
 export default async function DashboardPage() {
   const dashboard = getDailyDashboardSnapshot();
   const templateLibrary = await getTemplateLibrary();
   const userId = await getAuthorizedUserId();
   const today = new Date().toISOString().slice(0, 10);
+
   const scheduledTasks = userId ? await getScheduledTasksByDate(today, userId) : [];
   const todayScheduledChecklist = scheduledTasks.map((task) => ({
     id: task.id,
@@ -27,7 +25,13 @@ export default async function DashboardPage() {
     window: task.window,
   }));
 
-  const todayChecklist = [...dashboard.checklist, ...todayScheduledChecklist];
+  // Build the full task list the same way the client component would
+  const mergedTasks = mergeActiveTemplateTasks(templateLibrary);
+  const baseTasks = mergedTasks.length > 0 ? mergedTasks : dashboard.checklist;
+  const todayChecklist = [...baseTasks, ...todayScheduledChecklist];
+
+  // Load persisted completed state from DB (empty object if no DB)
+  const persistedEntries = userId ? await loadDailyEntries(userId, today) : {};
 
   return (
     <div className="space-y-8">
@@ -139,6 +143,9 @@ export default async function DashboardPage() {
             initialTasks={todayChecklist}
             initialTemplates={templateLibrary}
             scheduledTasks={todayScheduledChecklist}
+            persistedEntries={persistedEntries}
+            checklistDate={today}
+            isAuthenticated={!!userId}
           />
         </section>
 
@@ -172,7 +179,6 @@ export default async function DashboardPage() {
               ))}
             </div>
           </section>
-
         </aside>
       </div>
     </div>

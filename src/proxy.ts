@@ -8,6 +8,30 @@ export async function proxy(request: NextRequest) {
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
 
+  const secret =
+    process.env.AUTH_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    "serene-diary-default-auth-secret-do-not-use-in-real-production";
+
+  let token = null;
+  try {
+    token = await getToken({
+      req: request,
+      secret,
+    });
+  } catch (error) {
+    console.error("proxy getToken error:", error);
+  }
+
+  const isAuthPage = pathname === "/sign-in" || pathname === "/login";
+
+  if (isAuthPage) {
+    if (token?.email) {
+      return NextResponse.redirect(new URL("/dashboard", nextUrl));
+    }
+    return NextResponse.next();
+  }
+
   const isPublicRoute =
     publicRoutes.some((route) => pathname.startsWith(route)) ||
     pathname.startsWith("/api/auth");
@@ -15,11 +39,6 @@ export async function proxy(request: NextRequest) {
   if (isPublicRoute) {
     return NextResponse.next();
   }
-
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-  });
 
   if (!token?.email) {
     return NextResponse.redirect(new URL("/sign-in", nextUrl));

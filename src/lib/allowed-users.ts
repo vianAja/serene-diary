@@ -7,31 +7,35 @@ function normalizeEmail(email: string) {
 }
 
 export async function ensureDefaultAllowedEmail() {
-  const db = getDb();
-  const defaultEmail = normalizeEmail(process.env.ALLOWED_EMAIL ?? "");
+  try {
+    const db = getDb();
+    const defaultEmail = normalizeEmail(process.env.ALLOWED_EMAIL ?? "");
 
-  if (!db || !defaultEmail) {
-    return;
+    if (!db || !defaultEmail) {
+      return;
+    }
+
+    const existing = await db
+      .select()
+      .from(allowedUsers)
+      .where(eq(allowedUsers.email, defaultEmail))
+      .limit(1);
+
+    if (existing.length > 0) {
+      return;
+    }
+
+    const now = new Date();
+    await db.insert(allowedUsers).values({
+      id: `allowed-${crypto.randomUUID()}`,
+      email: defaultEmail,
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    });
+  } catch (error) {
+    console.error("ensureDefaultAllowedEmail error:", error);
   }
-
-  const existing = await db
-    .select()
-    .from(allowedUsers)
-    .where(eq(allowedUsers.email, defaultEmail))
-    .limit(1);
-
-  if (existing.length > 0) {
-    return;
-  }
-
-  const now = new Date();
-  await db.insert(allowedUsers).values({
-    id: `allowed-${crypto.randomUUID()}`,
-    email: defaultEmail,
-    isActive: true,
-    createdAt: now,
-    updatedAt: now,
-  });
 }
 
 export async function isEmailAllowed(email: string) {
@@ -47,15 +51,20 @@ export async function isEmailAllowed(email: string) {
     return targetEmail === defaultEmail;
   }
 
-  await ensureDefaultAllowedEmail();
+  try {
+    await ensureDefaultAllowedEmail();
 
-  const match = await db
-    .select()
-    .from(allowedUsers)
-    .where(and(eq(allowedUsers.email, targetEmail), eq(allowedUsers.isActive, true)))
-    .limit(1);
+    const match = await db
+      .select()
+      .from(allowedUsers)
+      .where(and(eq(allowedUsers.email, targetEmail), eq(allowedUsers.isActive, true)))
+      .limit(1);
 
-  return match.length > 0;
+    return match.length > 0;
+  } catch (error) {
+    console.error("isEmailAllowed error:", error);
+    return targetEmail === defaultEmail;
+  }
 }
 
 export async function listAllowedUsers() {

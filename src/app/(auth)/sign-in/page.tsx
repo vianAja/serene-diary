@@ -1,8 +1,5 @@
 import Image from "next/image";
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { BookOpenText, ShieldCheck, Sparkles } from "lucide-react";
-import { authOptions } from "@/auth";
 import { GoogleSignInButton } from "@/components/google-sign-in-button";
 
 type SignInPageProps = {
@@ -22,12 +19,6 @@ function getErrorMessage(error: string | undefined) {
 }
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
-  const session = await getServerSession(authOptions);
-
-  if (session?.user?.email?.toLowerCase() === "najwanoctavian@gmail.com") {
-    redirect("/dashboard");
-  }
-
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const error =
     typeof resolvedSearchParams.error === "string"

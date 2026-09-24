@@ -20,7 +20,12 @@ export function getDb() {
   }
 
   if (!database) {
-    database = createDatabase(connectionString);
+    try {
+      database = createDatabase(connectionString);
+    } catch (error) {
+      console.error("Failed to initialize database client:", error);
+      return null;
+    }
   }
 
   return database;

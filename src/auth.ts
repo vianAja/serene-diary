@@ -3,7 +3,10 @@ import Google from "next-auth/providers/google";
 import { isEmailAllowed } from "@/lib/allowed-users";
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.AUTH_SECRET,
+  secret:
+    process.env.AUTH_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    "serene-diary-default-auth-secret-do-not-use-in-real-production",
   pages: {
     signIn: "/sign-in",
     error: "/sign-in",
@@ -13,8 +16,8 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      clientId: process.env.GOOGLE_CLIENT_ID || "dummy-google-client-id",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "dummy-google-client-secret",
       authorization: {
         params: {
           prompt: "consent",

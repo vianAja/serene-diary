@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth";
+import { unstable_rethrow } from "next/navigation";
 import { authOptions } from "@/auth";
 import { isEmailAllowed } from "@/lib/allowed-users";
 
@@ -24,7 +25,13 @@ function getInitials(name: string) {
 }
 
 export async function getViewerProfile(): Promise<ViewerProfile> {
-  const session = await getServerSession(authOptions);
+  let session = null;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (error) {
+    unstable_rethrow(error);
+    console.error("Failed to retrieve session in getViewerProfile:", error);
+  }
 
   if (!session?.user) {
     return {

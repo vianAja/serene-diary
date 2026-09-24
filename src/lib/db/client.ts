@@ -20,9 +20,9 @@ export function getDb() {
     try {
       sqlClient = postgres(connectionString, {
         prepare: false, // Important for Supabase transaction pooler (pgbouncer)
-        max: 5,
-        connect_timeout: 10,
-        idle_timeout: 20,
+        max: 3,
+        connect_timeout: 3, // Fail fast if unreachable so page doesn't hang
+        idle_timeout: 10,
       });
       database = drizzle(sqlClient, { schema });
     } catch (error) {

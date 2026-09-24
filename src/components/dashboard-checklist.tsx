@@ -1,9 +1,31 @@
 "use client";
 
-import { startTransition, useCallback, useState } from "react";
+import { startTransition, useCallback, useEffect, useState } from "react";
 import { CheckCheck, Loader2 } from "lucide-react";
 import type { ChecklistTask, TemplateDefinition } from "@/lib/mock-data";
-import { mergeActiveTemplateTasks } from "@/lib/template-storage";
+import {
+  loadStoredTemplates,
+  mergeActiveTemplateTasks,
+} from "@/lib/template-storage";
+
+function getLocalChecklist(date: string): Record<string, boolean> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(`serene_checklist_${date}`);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function setLocalChecklist(date: string, state: Record<string, boolean>) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(`serene_checklist_${date}`, JSON.stringify(state));
+  } catch {
+    // Ignore quota errors
+  }
+}
 
 export function DashboardChecklist({
   initialTasks,
@@ -16,7 +38,6 @@ export function DashboardChecklist({
   initialTasks: ChecklistTask[];
   initialTemplates: TemplateDefinition[];
   scheduledTasks?: ChecklistTask[];
-  // Map of entryId -> completed loaded from DB (server-side)
   persistedEntries?: Record<string, boolean>;
   checklistDate: string;
   isAuthenticated: boolean;
@@ -25,7 +46,7 @@ export function DashboardChecklist({
     const mergedTasks = mergeActiveTemplateTasks(initialTemplates);
     const base = mergedTasks.length > 0 ? mergedTasks : initialTasks;
     const all = [...base, ...scheduledTasks.filter((s) => !base.some((b) => b.id === s.id))];
-    // Apply persisted completed state from DB
+
     return all.map((task) =>
       task.id in persistedEntries
         ? { ...task, completed: persistedEntries[task.id] }
@@ -35,6 +56,31 @@ export function DashboardChecklist({
 
   // Track which task IDs are currently being saved to show a spinner
   const [saving, setSaving] = useState<Set<string>>(new Set());
+
+  // On mount, reconcile with client-side localStorage (guarantees persistence across reloads)
+  useEffect(() => {
+    // 1. Reconcile templates if client has stored template customization
+    const storedTemplates = loadStoredTemplates(initialTemplates);
+    const mergedTasks = mergeActiveTemplateTasks(storedTemplates);
+    const base = mergedTasks.length > 0 ? mergedTasks : initialTasks;
+    const all = [...base, ...scheduledTasks.filter((s) => !base.some((b) => b.id === s.id))];
+
+    // 2. Read local checklist state
+    const local = getLocalChecklist(checklistDate);
+
+    setTasks(
+      all.map((task) => {
+        // Preference: local storage toggle > server persisted entry > default task completed
+        if (task.id in local) {
+          return { ...task, completed: local[task.id] };
+        }
+        if (task.id in persistedEntries) {
+          return { ...task, completed: persistedEntries[task.id] };
+        }
+        return task;
+      }),
+    );
+  }, [initialTemplates, initialTasks, scheduledTasks, checklistDate, persistedEntries]);
 
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((task) => task.completed).length;
@@ -47,7 +93,7 @@ export function DashboardChecklist({
 
       const nextCompleted = !task.completed;
 
-      // Optimistic UI update
+      // 1. Optimistic UI update
       startTransition(() => {
         setTasks((current) =>
           current.map((t) =>
@@ -56,9 +102,12 @@ export function DashboardChecklist({
         );
       });
 
-      if (!isAuthenticated) return;
+      // 2. Immediate localStorage persistence (bulletproof across page refreshes)
+      const currentLocal = getLocalChecklist(checklistDate);
+      currentLocal[taskId] = nextCompleted;
+      setLocalChecklist(checklistDate, currentLocal);
 
-      // Persist to DB
+      // 3. Persist to DB via background API call
       const taskIndex = tasks.findIndex((t) => t.id === taskId);
       setSaving((prev) => new Set(prev).add(taskId));
 
@@ -75,16 +124,14 @@ export function DashboardChecklist({
           completed: nextCompleted,
         }),
       })
+        .then(async (res) => {
+          if (!res.ok) {
+            console.warn("Checklist API sync returned:", res.status);
+          }
+        })
         .catch((err) => {
-          console.error("Failed to persist checklist toggle:", err);
-          // Rollback on error
-          startTransition(() => {
-            setTasks((current) =>
-              current.map((t) =>
-                t.id === taskId ? { ...t, completed: task.completed } : t,
-              ),
-            );
-          });
+          console.warn("Could not sync checklist to database (persisted locally):", err);
+          // Keep user's checked task intact! Do not rollback!
         })
         .finally(() => {
           setSaving((prev) => {
@@ -94,7 +141,7 @@ export function DashboardChecklist({
           });
         });
     },
-    [tasks, checklistDate, isAuthenticated],
+    [tasks, checklistDate],
   );
 
   return (

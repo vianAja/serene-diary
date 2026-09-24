@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, or } from "drizzle-orm";
 import {
   getTemplateManagementSnapshot,
   type TemplateDefinition,
@@ -34,62 +34,76 @@ function buildShortLabel(name: string) {
     .join("");
 }
 
-function buildTemplateId(name: string) {
+function buildTemplateId(name: string, userId: string) {
   const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  return `template-${slug || crypto.randomUUID()}`;
+  return `tpl-${userId.replace(/[^a-z0-9]/gi, "_")}-${slug || crypto.randomUUID().slice(0, 8)}`;
 }
 
-function buildItemId(label: string) {
-  const slug = label.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  return `item-${slug || crypto.randomUUID()}`;
-}
-
-async function seedDefaultTemplates(userId: string) {
+async function seedDefaultTemplates(userId: string): Promise<TemplateDefinition[]> {
   const db = getDb();
+  const templates = cloneDefaultTemplates();
 
   if (!db) {
-    return cloneDefaultTemplates();
+    return templates;
   }
 
-  const templates = cloneDefaultTemplates();
   const timestamp = new Date();
 
   try {
-    await db.insert(checklistTemplates).values(
-      templates.map((template, index) => ({
-        id: template.id,
-        userId,
-        position: index,
-        name: template.name,
-        description: template.description,
-        focus: template.focus,
-        color: template.color,
-        shortLabel: template.shortLabel,
-        frequency: template.frequency,
-        isActive: template.active,
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      })),
-    );
+    const existing = await db
+      .select({ id: checklistTemplates.id })
+      .from(checklistTemplates)
+      .where(eq(checklistTemplates.userId, userId))
+      .limit(1);
 
-    await db.insert(templateChecklistItems).values(
-      templates.flatMap((template) =>
-        template.items.map((item, index) => ({
-          id: item.id,
-          templateId: template.id,
-          label: item.label,
-          category: item.category,
-          description: item.description,
-          window: item.window,
+    if (existing.length > 0) {
+      return await getTemplateLibrary(userId);
+    }
+
+    for (const [index, template] of templates.entries()) {
+      const templateId = `tpl-${userId.replace(/[^a-z0-9]/gi, "_")}-${template.id}`;
+
+      await db
+        .insert(checklistTemplates)
+        .values({
+          id: templateId,
+          userId,
           position: index,
-        })),
-      ),
-    );
+          name: template.name,
+          description: template.description,
+          focus: template.focus,
+          color: template.color,
+          shortLabel: template.shortLabel,
+          frequency: template.frequency,
+          isActive: template.active,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        })
+        .onConflictDoNothing();
+
+      if (template.items.length > 0) {
+        await db
+          .insert(templateChecklistItems)
+          .values(
+            template.items.map((item, itemIdx) => ({
+              id: `item-${userId.replace(/[^a-z0-9]/gi, "_")}-${template.id}-${item.id}`,
+              templateId,
+              label: item.label,
+              category: item.category,
+              description: item.description,
+              window: item.window,
+              position: itemIdx,
+            })),
+          )
+          .onConflictDoNothing();
+      }
+    }
+
+    return await getTemplateLibrary(userId);
   } catch (error) {
     console.error("Failed to seed default templates to DB:", error);
+    return templates;
   }
-
-  return templates;
 }
 
 function mapTemplates(
@@ -181,23 +195,27 @@ export async function createTemplate(
   const trimmedDescription = description.trim();
   const currentTemplates = await getTemplateLibrary(userId);
 
-  const nextTemplate = {
-    id: buildTemplateId(trimmedName),
-    userId,
-    position: -1,
-    name: trimmedName,
-    description:
-      trimmedDescription || "A new template for structured daily checklist routines.",
-    focus: "Custom",
-    color: defaultTemplateColors[currentTemplates.length % defaultTemplateColors.length],
-    shortLabel: buildShortLabel(trimmedName),
-    frequency: "Daily",
-    isActive: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  try {
+    const nextTemplate = {
+      id: buildTemplateId(trimmedName, userId),
+      userId,
+      position: -1,
+      name: trimmedName,
+      description:
+        trimmedDescription || "A new template for structured daily checklist routines.",
+      focus: "Custom",
+      color: defaultTemplateColors[currentTemplates.length % defaultTemplateColors.length],
+      shortLabel: buildShortLabel(trimmedName),
+      frequency: "Daily",
+      isActive: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-  await db.insert(checklistTemplates).values(nextTemplate);
+    await db.insert(checklistTemplates).values(nextTemplate);
+  } catch (error) {
+    console.error("createTemplate error:", error);
+  }
 
   return getTemplateLibrary(userId);
 }
@@ -222,20 +240,27 @@ export async function updateTemplate(
   const trimmedName = name.trim();
   const trimmedDescription = description.trim();
 
-  await db
-    .update(checklistTemplates)
-    .set({
-      name: trimmedName,
-      description: trimmedDescription,
-      shortLabel: buildShortLabel(trimmedName),
-      updatedAt: new Date(),
-    })
-    .where(
-      and(
-        eq(checklistTemplates.id, templateId),
-        eq(checklistTemplates.userId, userId),
-      ),
-    );
+  try {
+    await db
+      .update(checklistTemplates)
+      .set({
+        name: trimmedName,
+        description: trimmedDescription,
+        shortLabel: buildShortLabel(trimmedName),
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          or(
+            eq(checklistTemplates.id, templateId),
+            eq(checklistTemplates.id, `tpl-${userId.replace(/[^a-z0-9]/gi, "_")}-${templateId}`),
+          ),
+          eq(checklistTemplates.userId, userId),
+        ),
+      );
+  } catch (error) {
+    console.error("updateTemplate error:", error);
+  }
 
   return getTemplateLibrary(userId);
 }
@@ -247,14 +272,21 @@ export async function deleteTemplate(templateId: string, userId = defaultUserId)
     return getTemplateLibrary(userId);
   }
 
-  await db
-    .delete(checklistTemplates)
-    .where(
-      and(
-        eq(checklistTemplates.id, templateId),
-        eq(checklistTemplates.userId, userId),
-      ),
-    );
+  try {
+    await db
+      .delete(checklistTemplates)
+      .where(
+        and(
+          or(
+            eq(checklistTemplates.id, templateId),
+            eq(checklistTemplates.id, `tpl-${userId.replace(/[^a-z0-9]/gi, "_")}-${templateId}`),
+          ),
+          eq(checklistTemplates.userId, userId),
+        ),
+      );
+  } catch (error) {
+    console.error("deleteTemplate error:", error);
+  }
 
   return getTemplateLibrary(userId);
 }
@@ -270,18 +302,25 @@ export async function toggleTemplateActive(
     return getTemplateLibrary(userId);
   }
 
-  await db
-    .update(checklistTemplates)
-    .set({
-      isActive: active,
-      updatedAt: new Date(),
-    })
-    .where(
-      and(
-        eq(checklistTemplates.id, templateId),
-        eq(checklistTemplates.userId, userId),
-      ),
-    );
+  try {
+    await db
+      .update(checklistTemplates)
+      .set({
+        isActive: active,
+        updatedAt: new Date(),
+      })
+      .where(
+        and(
+          or(
+            eq(checklistTemplates.id, templateId),
+            eq(checklistTemplates.id, `tpl-${userId.replace(/[^a-z0-9]/gi, "_")}-${templateId}`),
+          ),
+          eq(checklistTemplates.userId, userId),
+        ),
+      );
+  } catch (error) {
+    console.error("toggleTemplateActive DB error:", error);
+  }
 
   return getTemplateLibrary(userId);
 }
@@ -303,44 +342,53 @@ export async function createTemplateItem(
     return getTemplateLibrary(userId);
   }
 
-  const template = await db
-    .select()
-    .from(checklistTemplates)
-    .where(
-      and(
-        eq(checklistTemplates.id, templateId),
-        eq(checklistTemplates.userId, userId),
-      ),
-    )
-    .limit(1);
+  try {
+    const template = await db
+      .select()
+      .from(checklistTemplates)
+      .where(
+        and(
+          or(
+            eq(checklistTemplates.id, templateId),
+            eq(checklistTemplates.id, `tpl-${userId.replace(/[^a-z0-9]/gi, "_")}-${templateId}`),
+          ),
+          eq(checklistTemplates.userId, userId),
+        ),
+      )
+      .limit(1);
 
-  if (template.length === 0) {
-    return getTemplateLibrary(userId);
+    if (template.length === 0) {
+      return getTemplateLibrary(userId);
+    }
+
+    const actualTemplateId = template[0].id;
+
+    const items = await db
+      .select()
+      .from(templateChecklistItems)
+      .where(eq(templateChecklistItems.templateId, actualTemplateId))
+      .orderBy(desc(templateChecklistItems.position))
+      .limit(1);
+
+    const nextPosition = (items[0]?.position ?? -1) + 1;
+
+    await db.insert(templateChecklistItems).values({
+      id: `item-${actualTemplateId}-${crypto.randomUUID().slice(0, 8)}`,
+      templateId: actualTemplateId,
+      label: label.trim(),
+      category: "Checklist",
+      description: description.trim() || "Add a short supporting note for this task.",
+      window: "Flexible",
+      position: nextPosition,
+    });
+
+    await db
+      .update(checklistTemplates)
+      .set({ updatedAt: new Date() })
+      .where(eq(checklistTemplates.id, actualTemplateId));
+  } catch (error) {
+    console.error("createTemplateItem error:", error);
   }
-
-  const items = await db
-    .select()
-    .from(templateChecklistItems)
-    .where(eq(templateChecklistItems.templateId, templateId))
-    .orderBy(desc(templateChecklistItems.position))
-    .limit(1);
-
-  const nextPosition = (items[0]?.position ?? -1) + 1;
-
-  await db.insert(templateChecklistItems).values({
-    id: buildItemId(label),
-    templateId,
-    label: label.trim(),
-    category: "Checklist",
-    description: description.trim() || "Add a short supporting note for this task.",
-    window: "Flexible",
-    position: nextPosition,
-  });
-
-  await db
-    .update(checklistTemplates)
-    .set({ updatedAt: new Date() })
-    .where(eq(checklistTemplates.id, templateId));
 
   return getTemplateLibrary(userId);
 }
@@ -356,35 +404,43 @@ export async function deleteTemplateItem(
     return getTemplateLibrary(userId);
   }
 
-  const template = await db
-    .select()
-    .from(checklistTemplates)
-    .where(
-      and(
-        eq(checklistTemplates.id, templateId),
-        eq(checklistTemplates.userId, userId),
-      ),
-    )
-    .limit(1);
+  try {
+    const template = await db
+      .select()
+      .from(checklistTemplates)
+      .where(
+        and(
+          or(
+            eq(checklistTemplates.id, templateId),
+            eq(checklistTemplates.id, `tpl-${userId.replace(/[^a-z0-9]/gi, "_")}-${templateId}`),
+          ),
+          eq(checklistTemplates.userId, userId),
+        ),
+      )
+      .limit(1);
 
-  if (template.length === 0) {
-    return getTemplateLibrary(userId);
+    if (template.length === 0) {
+      return getTemplateLibrary(userId);
+    }
+
+    const actualTemplateId = template[0].id;
+
+    await db
+      .delete(templateChecklistItems)
+      .where(
+        and(
+          eq(templateChecklistItems.id, itemId),
+          eq(templateChecklistItems.templateId, actualTemplateId),
+        ),
+      );
+
+    await db
+      .update(checklistTemplates)
+      .set({ updatedAt: new Date() })
+      .where(eq(checklistTemplates.id, actualTemplateId));
+  } catch (error) {
+    console.error("deleteTemplateItem error:", error);
   }
-
-  await db
-    .delete(templateChecklistItems)
-    .where(
-      and(
-        eq(templateChecklistItems.id, itemId),
-        eq(templateChecklistItems.templateId, templateId),
-      ),
-    );
-
-  await db
-    .update(checklistTemplates)
-    .set({ updatedAt: new Date() })
-    .where(eq(checklistTemplates.id, templateId));
 
   return getTemplateLibrary(userId);
 }
-

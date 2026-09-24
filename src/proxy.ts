@@ -8,6 +8,11 @@ export async function proxy(request: NextRequest) {
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
 
+  // Let all API routes pass through to be handled by Route Handlers with JSON responses
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
+
   const secret =
     process.env.AUTH_SECRET ||
     process.env.NEXTAUTH_SECRET ||
@@ -15,10 +20,24 @@ export async function proxy(request: NextRequest) {
 
   let token = null;
   try {
+    const isHttps =
+      nextUrl.protocol === "https:" ||
+      request.headers.get("x-forwarded-proto") === "https" ||
+      process.env.NODE_ENV === "production";
+
     token = await getToken({
       req: request,
       secret,
+      secureCookie: isHttps,
     });
+
+    if (!token) {
+      token = await getToken({
+        req: request,
+        secret,
+        secureCookie: false,
+      });
+    }
   } catch (error) {
     console.error("proxy getToken error:", error);
   }
@@ -32,9 +51,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const isPublicRoute =
-    publicRoutes.some((route) => pathname.startsWith(route)) ||
-    pathname.startsWith("/api/auth");
+  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
 
   if (isPublicRoute) {
     return NextResponse.next();
@@ -50,6 +67,5 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|png|gif|svg|ttf|woff2?|ico|json|csv|zip)).*)",
-    "/(api|trpc)(.*)",
   ],
 };

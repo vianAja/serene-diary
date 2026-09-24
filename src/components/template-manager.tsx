@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import type { TemplateDefinition } from "@/lib/mock-data";
 
+import { loadStoredTemplates, saveStoredTemplates } from "@/lib/template-storage";
+
 type InlineTemplateDraft = {
   name: string;
   description: string;
@@ -56,7 +58,9 @@ export function TemplateManager({
 }: {
   initialTemplates: TemplateDefinition[];
 }) {
-  const [templates, setTemplates] = useState<TemplateDefinition[]>(initialTemplates);
+  const [templates, setTemplates] = useState<TemplateDefinition[]>(() => {
+    return loadStoredTemplates(initialTemplates);
+  });
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(
     initialTemplates[0]?.id ?? "",
   );
@@ -74,6 +78,7 @@ export function TemplateManager({
 
   function applyTemplates(nextTemplates: TemplateDefinition[]) {
     setTemplates(nextTemplates);
+    saveStoredTemplates(nextTemplates);
     setSelectedTemplateId((currentSelectedTemplateId) => {
       if (nextTemplates.some((template) => template.id === currentSelectedTemplateId)) {
         return currentSelectedTemplateId;
@@ -95,10 +100,28 @@ export function TemplateManager({
       },
     });
 
-    const payload = (await response.json()) as T & { error?: string };
+    const text = await response.text();
+    let payload: (T & { error?: string }) | null = null;
+
+    if (text) {
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        // Response is not json
+      }
+    }
 
     if (!response.ok) {
-      throw new Error(payload.error || "Unable to update templates.");
+      throw new Error(
+        payload?.error ||
+          (response.status === 401
+            ? "Session expired. Please sign in again."
+            : `Request failed (${response.status})`),
+      );
+    }
+
+    if (!payload) {
+      throw new Error("Empty response received from server.");
     }
 
     return payload;
@@ -122,6 +145,12 @@ export function TemplateManager({
     setSelectedTemplateId(templateId);
     setErrorMessage(null);
 
+    // Optimistic UI update & immediate persistence to localStorage
+    const optimisticTemplates = templates.map((t) =>
+      t.id === templateId ? { ...t, active: !t.active } : t,
+    );
+    applyTemplates(optimisticTemplates);
+
     startTransition(async () => {
       try {
         const payload = await requestTemplates<{ templates: TemplateDefinition[] }>(
@@ -135,12 +164,11 @@ export function TemplateManager({
         );
         applyTemplates(payload.templates);
       } catch (error) {
-        setErrorMessage(
-          error instanceof Error ? error.message : "Unable to update template status.",
-        );
+        console.warn("Could not sync template toggle to DB:", error);
       }
     });
   }
+
 
   function startEditingTemplate(template: TemplateDefinition) {
     setEditingTemplateId(template.id);

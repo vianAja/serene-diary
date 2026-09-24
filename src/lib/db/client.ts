@@ -1,16 +1,9 @@
-import { drizzle } from "drizzle-orm/neon-serverless";
-import { neonConfig, Pool } from "@neondatabase/serverless";
-import ws from "ws";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import * as schema from "@/lib/db/schema";
 
-neonConfig.webSocketConstructor = ws;
-
-function createDatabase(connectionString: string) {
-  const pool = new Pool({ connectionString });
-  return drizzle({ client: pool, schema });
-}
-
-let database: ReturnType<typeof createDatabase> | null = null;
+let sqlClient: postgres.Sql | null = null;
+let database: ReturnType<typeof drizzle> | null = null;
 
 export function getDb() {
   const connectionString = process.env.DATABASE_URL?.trim();
@@ -25,7 +18,13 @@ export function getDb() {
 
   if (!database) {
     try {
-      database = createDatabase(connectionString);
+      sqlClient = postgres(connectionString, {
+        prepare: false, // Important for Supabase transaction pooler (pgbouncer)
+        max: 5,
+        connect_timeout: 10,
+        idle_timeout: 20,
+      });
+      database = drizzle(sqlClient, { schema });
     } catch (error) {
       console.error("Failed to initialize database client:", error);
       return null;

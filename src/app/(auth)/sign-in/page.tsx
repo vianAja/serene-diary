@@ -31,7 +31,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <main className="flex min-h-screen flex-col items-center justify-center bg-surface px-4 pb-24 pt-20 md:hidden">
         <div className="w-full max-w-md">
           <header className="mb-8 flex flex-col items-center text-center">
-            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-[20px] bg-white shadow-[0px_4px_12px_rgba(137,168,178,0.08)]">
+            <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-[20px] bg-surface shadow-[0_4px_16px_rgba(17,45,78,0.05)]">
               <Sparkles className="h-8 w-8 text-primary" />
             </div>
             <h1 className="mt-2 text-[28px] font-bold tracking-[-0.03em] text-foreground">
@@ -42,7 +42,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             </p>
           </header>
 
-          <section className="rounded-[24px] bg-white p-6 shadow-[0px_4px_12px_rgba(137,168,178,0.08)]">
+          <section className="surface-card rounded-[24px] p-6">
             <GoogleSignInButton
               label="Continue with Google"
               className="rounded-[14px] border-outline/80 py-4 text-[12px] font-semibold uppercase tracking-[0.04em]"
@@ -65,7 +65,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         </div>
       </main>
 
-      <main className="hidden min-h-screen items-center justify-center bg-[#f1f0e8] bg-[radial-gradient(circle_at_top_left,rgba(137,168,178,0.15),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(179,200,207,0.2),transparent_24%)] px-4 py-10 md:flex">
+      <main className="hidden min-h-screen items-center justify-center bg-background px-4 py-10 md:flex">
         <div className="flex w-full max-w-[440px] flex-col items-center">
           <div className="mb-8 text-center">
             <div className="mb-1 flex items-center justify-center gap-2">
@@ -77,7 +77,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             <p className="text-base text-muted">Stay mindful today</p>
           </div>
 
-          <section className="w-full rounded-[20px] border border-outline/40 bg-white p-8 shadow-[0px_4px_12px_rgba(137,168,178,0.08)]">
+          <section className="surface-card w-full rounded-[20px] p-8">
             <header className="mb-8">
               <h1 className="text-[20px] font-semibold text-foreground">
                 Welcome back

@@ -8,14 +8,20 @@ import {
   CalendarDays,
   CalendarRange,
   FileStack,
+  NotebookPen,
   Settings,
 } from "lucide-react";
 
 const links = [
   {
-    href: "/dashboard",
-    label: "Daily",
+    href: "/checkin",
+    label: "Check-in",
     icon: BookCheck,
+  },
+  {
+    href: "/notes",
+    label: "Notes",
+    icon: NotebookPen,
   },
   {
     href: "/reports/weekly",
@@ -51,15 +57,15 @@ export function SidebarNav() {
     <nav className="grid gap-1 px-4">
       {links.map((link) => {
         const Icon = link.icon;
-        const active = pathname === link.href;
+        const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
 
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium ${
+            className={`flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-transform ${
               active
-                ? "translate-x-1 bg-secondary text-primary"
+                ? "translate-x-1 bg-secondary text-accent"
                 : "text-muted hover:bg-surface-soft hover:text-primary"
             }`}
           >

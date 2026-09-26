@@ -146,8 +146,8 @@ export function CalendarPlanner({
 
   return (
     <>
-      <section className="overflow-hidden rounded-[16px] border border-outline/70 bg-white shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
-        <div className="flex items-center justify-between bg-gradient-to-b from-[#1d7ccc] to-[#165f9f] px-4 py-2 text-white">
+      <section className="surface-card overflow-hidden rounded-[16px]">
+        <div className="flex items-center justify-between bg-primary px-4 py-2 text-white">
           <button
             type="button"
             onClick={() =>
@@ -205,13 +205,13 @@ export function CalendarPlanner({
                     onClick={() => openDay(day.iso)}
                     className={`relative min-h-16 border-l border-outline/20 px-2 py-2 text-left transition-colors ${
                       day.isCurrentMonth
-                        ? "bg-white hover:bg-[#f0f7fc]"
-                        : "bg-[#f8f8f8] text-muted/70 hover:bg-[#eef1f3]"
-                    } ${isSelected ? "bg-[#e9f4ff]" : ""}`}
+                        ? "bg-surface hover:bg-surface-soft"
+                        : "bg-surface-soft text-muted/70 hover:bg-secondary"
+                    } ${isSelected ? "bg-secondary" : ""}`}
                   >
                     <span className="text-[20px] leading-none">{day.day}</span>
                     {taskCount > 0 ? (
-                      <span className="absolute bottom-2 right-2 rounded-full bg-[#1d7ccc] px-2 py-0.5 text-[11px] font-semibold text-white">
+                      <span className="absolute bottom-2 right-2 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-white">
                         {taskCount}
                       </span>
                     ) : null}

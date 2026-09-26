@@ -174,7 +174,7 @@ export function DashboardChecklist({
           return (
             <article
               key={task.id}
-              className={`rounded-[18px] border border-outline/40 bg-white p-4 shadow-[0px_4px_12px_rgba(137,168,178,0.08)] transition-transform hover:-translate-y-0.5 md:rounded-[24px] md:border-outline/70 md:bg-surface-soft/70 md:shadow-none ${
+              className={`rounded-[18px] border border-outline/70 bg-surface p-4 shadow-[0_4px_16px_rgba(17,45,78,0.05)] transition-transform hover:-translate-y-0.5 md:rounded-[24px] md:bg-surface-soft/70 md:shadow-none ${
                 task.completed ? "opacity-75" : ""
               }`}
               style={{ animationDelay: `${index * 80}ms` }}

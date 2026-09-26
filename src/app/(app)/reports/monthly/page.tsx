@@ -117,7 +117,7 @@ export default function MonthlyReportPage() {
             </div>
           </section>
 
-          <section className="rounded-[30px] border border-primary/10 bg-gradient-to-br from-primary to-primary-soft p-6 text-white shadow-[0_24px_60px_rgba(71,98,108,0.22)]">
+          <section className="rounded-[30px] border border-primary/10 bg-gradient-to-br from-primary to-accent p-6 text-white shadow-[0_18px_40px_rgba(17,45,78,0.12)]">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
               Template Champion
             </p>

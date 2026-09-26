@@ -49,7 +49,7 @@ export function ProfileMenu({ profile }: { profile: ViewerProfile }) {
       </button>
 
       {open ? (
-        <div className="absolute left-0 top-12 z-50 w-[min(18rem,calc(100vw-2rem))] rounded-[18px] border border-outline/70 bg-white p-4 shadow-[0_12px_32px_rgba(71,98,108,0.14)] md:left-auto md:right-0 md:top-14 md:w-72">
+        <div className="absolute left-0 top-12 z-50 w-[min(18rem,calc(100vw-2rem))] rounded-[18px] border border-outline/70 bg-surface p-4 shadow-[0_12px_32px_rgba(17,45,78,0.1)] md:left-auto md:right-0 md:top-14 md:w-72">
           <div className="flex items-center gap-3">
             {profile.avatarUrl ? (
               <Image

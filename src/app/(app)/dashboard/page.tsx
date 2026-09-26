@@ -51,7 +51,7 @@ export default async function DashboardPage() {
           <p className="text-base italic text-muted">{dashboard.quote}</p>
         </div>
 
-        <article className="overflow-hidden rounded-[20px] bg-white p-5 shadow-[0px_4px_12px_rgba(137,168,178,0.08)]">
+        <article className="surface-card overflow-hidden rounded-[20px] p-5">
           <div className="flex items-end justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
@@ -74,7 +74,7 @@ export default async function DashboardPage() {
         </article>
 
         <div className="grid grid-cols-2 gap-4">
-          <article className="rounded-[20px] bg-white p-4 text-center shadow-[0px_4px_12px_rgba(137,168,178,0.08)]">
+          <article className="surface-card rounded-[20px] p-4 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
               Today&apos;s Mood
             </p>
@@ -86,11 +86,11 @@ export default async function DashboardPage() {
             </div>
           </article>
 
-          <article className="rounded-[20px] bg-white p-4 text-center shadow-[0px_4px_12px_rgba(137,168,178,0.08)]">
+          <article className="surface-card rounded-[20px] p-4 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
               Current Streak
             </p>
-            <div className="mt-3 flex items-center justify-center gap-2 text-[#795740]">
+            <div className="mt-3 flex items-center justify-center gap-2 text-accent">
               <Flame className="h-5 w-5 fill-current" />
               <span className="text-xl font-bold">{dashboard.streakDays} Days</span>
             </div>
@@ -98,7 +98,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <section className="fade-up hidden flex-col gap-5 rounded-[30px] border border-white/40 bg-white/65 p-6 shadow-[0_24px_60px_rgba(71,98,108,0.12)] md:flex md:flex-row md:items-end md:justify-between md:p-8">
+      <section className="surface-card fade-up hidden flex-col gap-5 rounded-[30px] p-6 md:flex md:flex-row md:items-end md:justify-between md:p-8">
         <div className="max-w-2xl space-y-3">
           <div className="inline-flex w-fit items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
             <Sparkles className="h-4 w-4" />

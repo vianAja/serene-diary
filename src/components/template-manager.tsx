@@ -334,7 +334,7 @@ export function TemplateManager({
   return (
     <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
       <div className="space-y-6 lg:col-span-5">
-        <div className="rounded-[24px] border border-outline/70 bg-white p-6 shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
+        <div className="surface-card rounded-[24px] p-6">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-[20px] font-semibold text-primary">
               Available Templates
@@ -356,7 +356,7 @@ export function TemplateManager({
             ) : null}
 
             {newTemplateDraft ? (
-              <article className="rounded-[18px] border-2 border-primary bg-[#f4f8f9] p-4">
+              <article className="rounded-[18px] border-2 border-primary bg-surface-soft p-4">
                 <div className="grid gap-3">
                   <input
                     value={newTemplateDraft.name}
@@ -416,7 +416,7 @@ export function TemplateManager({
                   onClick={() => selectTemplate(template.id)}
                   className={`group cursor-pointer rounded-[18px] border bg-white p-4 transition-all ${
                     isSelected
-                      ? "border-2 border-primary shadow-[0_4px_12px_rgba(137,168,178,0.08)]"
+                      ? "border-2 border-primary shadow-[0_4px_16px_rgba(17,45,78,0.05)]"
                       : "border-outline/70 hover:border-primary-soft hover:bg-surface-soft"
                   }`}
                 >
@@ -557,7 +557,7 @@ export function TemplateManager({
 
       <div className="lg:col-span-7">
         {!selectedTemplate ? (
-          <section className="rounded-[24px] border border-outline/70 bg-white p-10 text-center shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
+          <section className="surface-card rounded-[24px] p-10 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted">
               Template Editor
             </p>
@@ -569,7 +569,7 @@ export function TemplateManager({
             </p>
           </section>
         ) : (
-        <section className="rounded-[24px] border border-outline/70 bg-white p-6 shadow-[0_4px_12px_rgba(137,168,178,0.08)]">
+        <section className="surface-card rounded-[24px] p-6">
           <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h3 className="text-[32px] font-semibold leading-[40px] tracking-[-0.02em] text-foreground">
@@ -641,7 +641,7 @@ export function TemplateManager({
               <button
                 type="button"
                 onClick={() => setIsTaskComposerOpen(true)}
-                className="flex min-h-[108px] w-full items-center justify-center rounded-[18px] border border-dashed border-outline bg-[#fcfbf8] text-muted hover:border-primary hover:text-primary"
+                className="flex min-h-[108px] w-full items-center justify-center rounded-[18px] border border-dashed border-outline bg-surface-soft text-muted hover:border-primary hover:text-primary"
               >
                 <div className="flex flex-col items-center gap-2">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full border border-outline">
@@ -651,7 +651,7 @@ export function TemplateManager({
                 </div>
               </button>
             ) : (
-              <div className="rounded-[18px] border border-outline/70 bg-[#fcfbf8] p-4">
+              <div className="rounded-[18px] border border-outline/70 bg-surface-soft p-4">
                 <div className="grid gap-4">
                   <input
                     value={taskDraft.label}

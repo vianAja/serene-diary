@@ -7,13 +7,19 @@ import {
   CalendarRange,
   ChartColumn,
   FileStack,
+  NotebookPen,
 } from "lucide-react";
 
 const links = [
   {
-    href: "/dashboard",
-    label: "Daily",
+    href: "/checkin",
+    label: "Check-in",
     icon: BookCheck,
+  },
+  {
+    href: "/notes",
+    label: "Notes",
+    icon: NotebookPen,
   },
   {
     href: "/reports/weekly",
@@ -36,18 +42,18 @@ export function MobileBottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 z-40 flex w-full items-center justify-around rounded-t-[20px] border-t border-outline/30 bg-white px-4 py-3 shadow-[0_-4px_12px_rgba(137,168,178,0.08)] md:hidden">
+    <nav className="fixed bottom-0 left-0 z-40 flex w-full items-center justify-around rounded-t-[20px] border-t border-outline/70 bg-surface/95 px-2 py-3 shadow-[0_-4px_16px_rgba(17,45,78,0.06)] backdrop-blur md:hidden">
       {links.map((link) => {
         const Icon = link.icon;
-        const active = pathname === link.href;
+        const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
 
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={`flex min-w-[72px] flex-col items-center justify-center rounded-full px-3 py-1.5 text-[11px] font-semibold ${
+            className={`flex min-w-[64px] flex-col items-center justify-center rounded-xl px-2.5 py-1.5 text-[11px] font-semibold ${
               active
-                ? "bg-secondary text-primary"
+                ? "bg-secondary text-accent"
                 : "text-muted hover:bg-surface-soft hover:text-primary"
             }`}
           >

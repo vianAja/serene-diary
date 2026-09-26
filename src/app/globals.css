@@ -1,21 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f3ec;
-  --foreground: #1d2326;
-  --muted: #647075;
-  --surface: #fffdf9;
-  --surface-soft: #f4f0ea;
-  --surface-strong: #ece7df;
-  --primary: #47626c;
-  --primary-soft: #89a8b2;
-  --secondary: #cee3ea;
-  --accent: #dcc0ab;
-  --outline: #c9cbc7;
-  --success: #4f7d68;
-  --warning: #ad7f58;
-  --danger: #ba4f4f;
-  --shadow: 0 18px 50px rgba(102, 126, 135, 0.12);
+  --background: #f9f7f7;
+  --foreground: #112d4e;
+  --muted: #5b7392;
+  --surface: #ffffff;
+  --surface-soft: #f9f7f7;
+  --surface-strong: #dbe2ef;
+  --primary: #3f72af;
+  --primary-soft: #6f97c4;
+  --secondary: #dbe2ef;
+  --accent: #112d4e;
+  --outline: #dbe2ef;
+  --shadow: 0 12px 32px rgba(17, 45, 78, 0.08);
 }
 
 @theme inline {
@@ -30,9 +27,6 @@
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-outline: var(--outline);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-danger: var(--danger);
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", "SFMono-Regular", ui-monospace, monospace;
 }
@@ -47,10 +41,7 @@ html {
 
 body {
   min-height: 100%;
-  background:
-    radial-gradient(circle at top left, rgba(137, 168, 178, 0.26), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(220, 192, 171, 0.2), transparent 24%),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-manrope), "Manrope", ui-sans-serif, system-ui, sans-serif;
 }
@@ -66,17 +57,17 @@ button {
 }
 
 ::selection {
-  background: rgba(137, 168, 178, 0.3);
+  background: rgba(63, 114, 175, 0.22);
 }
 
 .glass-panel {
-  background: rgba(255, 253, 249, 0.8);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(12px);
 }
 
 .surface-card {
   background: var(--surface);
-  border: 1px solid rgba(201, 203, 199, 0.65);
+  border: 1px solid rgba(219, 226, 239, 0.9);
   box-shadow: var(--shadow);
 }
 

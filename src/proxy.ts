@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const publicRoutes = ["/sign-in", "/login", "/auth/google/callback"];
+const publicRoutes = ["/sign-in", "/login", "/auth/google/callback", "/mock"];
 
 export async function proxy(request: NextRequest) {
   const { nextUrl } = request;
@@ -59,6 +59,17 @@ export async function proxy(request: NextRequest) {
 
   if (!token?.email) {
     return NextResponse.redirect(new URL("/sign-in", nextUrl));
+  }
+
+  const isAllowed = token.isAllowed === true;
+  const isMockRoute = pathname.startsWith("/mock");
+
+  if (!isAllowed && !isMockRoute) {
+    return NextResponse.redirect(new URL("/mock", nextUrl));
+  }
+
+  if (isAllowed && isMockRoute) {
+    return NextResponse.redirect(new URL("/dashboard", nextUrl));
   }
 
   return NextResponse.next();

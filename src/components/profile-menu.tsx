@@ -6,6 +6,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import {
   ChevronDown,
+  Loader2,
   LogOut,
   Mail,
   ShieldCheck,
@@ -24,6 +25,12 @@ type ViewerProfile = {
 
 export function ProfileMenu({ profile }: { profile: ViewerProfile }) {
   const [open, setOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    await signOut({ callbackUrl: "/sign-in" });
+  }
 
   return (
     <div className="relative">
@@ -115,11 +122,21 @@ export function ProfileMenu({ profile }: { profile: ViewerProfile }) {
           ) : (
             <button
               type="button"
-              onClick={() => signOut({ callbackUrl: "/sign-in" })}
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-outline bg-white px-4 py-2 text-sm font-semibold text-primary hover:bg-surface-soft"
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-outline bg-white px-4 py-2 text-sm font-semibold text-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-soft hover:shadow-[0_8px_18px_rgba(71,98,108,0.14)] active:translate-y-0 disabled:cursor-wait disabled:opacity-70"
             >
-              <LogOut className="h-4 w-4" />
-              <span>Log Out</span>
+              {loggingOut ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Signing out...</span>
+                </>
+              ) : (
+                <>
+                  <LogOut className="h-4 w-4" />
+                  <span>Log Out</span>
+                </>
+              )}
             </button>
           )}
         </div>

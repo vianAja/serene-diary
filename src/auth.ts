@@ -35,13 +35,29 @@ export const authOptions: NextAuthOptions = {
         return "/sign-in?error=MissingEmail";
       }
 
-      const allowed = await isEmailAllowed(email);
+      return true;
+    },
+    async jwt({ token, user, profile }) {
+      const email =
+        user?.email?.toLowerCase() ??
+        (typeof token.email === "string" ? token.email.toLowerCase() : undefined) ??
+        (typeof profile?.email === "string" ? profile.email.toLowerCase() : undefined);
 
-      if (!allowed) {
-        return "/sign-in?error=AccessDenied";
+      if (email) {
+        token.email = email;
+        token.isAllowed = await isEmailAllowed(email);
+      } else {
+        token.isAllowed = false;
       }
 
-      return true;
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = {
+        ...session.user,
+        email: typeof token.email === "string" ? token.email : session.user?.email,
+      };
+      return session;
     },
   },
 };

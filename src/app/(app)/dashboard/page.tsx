@@ -114,13 +114,11 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid gap-4 md:min-w-[320px]">
-          <div className="surface-card rounded-[26px] p-5">
+        <div className="flex w-full max-w-[540px] items-stretch gap-4">
+          <div className="surface-card flex-1 rounded-[26px] p-5">
             <div className="flex items-center justify-between text-sm text-muted">
               <span>Checklist Progress</span>
-              <span className="font-semibold text-primary">
-                {progressLabel}
-              </span>
+              <span className="font-semibold text-primary">{progressLabel}</span>
             </div>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-secondary/60">
               <div
@@ -129,18 +127,15 @@ export default async function DashboardPage() {
               />
             </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="surface-card rounded-[24px] p-4">
-              <div className="flex items-center gap-2 text-primary">
-                <Flame className="h-4 w-4" />
-                <span className="text-xs font-semibold uppercase tracking-[0.22em]">
-                  Streak
-                </span>
-              </div>
-              <p className="mt-3 text-3xl font-bold">{dashboard.streakDays}</p>
-              <p className="text-sm text-muted">days in a row</p>
+          <div className="surface-card min-w-[180px] rounded-[24px] p-4">
+            <div className="flex items-center gap-2 text-primary">
+              <Flame className="h-4 w-4" />
+              <span className="text-xs font-semibold uppercase tracking-[0.22em]">
+                Streak
+              </span>
             </div>
+            <p className="mt-3 text-3xl font-bold">{dashboard.streakDays}</p>
+            <p className="text-sm text-muted">days in a row</p>
           </div>
         </div>
       </section>

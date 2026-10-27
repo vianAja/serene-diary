@@ -6,6 +6,7 @@ import { getHeaderDateLabel } from "@/lib/mock-data";
 import { getViewerProfile } from "@/lib/viewer-profile";
 import { ProfileMenu } from "@/components/profile-menu";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
+import { WorkspaceDateLabel } from "@/components/workspace-date-label";
 
 export async function AppShell({ children }: { children: ReactNode }) {
   const profile = await getViewerProfile();
@@ -78,14 +79,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
       <div className="md:ml-64">
         <main className="px-4 pb-28 pt-20 md:px-8 md:pb-12">
           <div className="mx-auto max-w-[1200px]">
-            <div className="mb-8 hidden md:block">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
-                Today
-              </p>
-              <p className="mt-1 text-[18px] font-semibold text-primary">
-                {getHeaderDateLabel()}
-              </p>
-            </div>
+            <WorkspaceDateLabel dateLabel={getHeaderDateLabel()} />
             {children}
           </div>
         </main>

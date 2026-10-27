@@ -71,6 +71,20 @@ button {
   box-shadow: var(--shadow);
 }
 
+.tahlil-arabic {
+  font-family:
+    "Noto Naskh Arabic",
+    "Noto Sans Arabic",
+    Amiri,
+    "Scheherazade New",
+    "Traditional Arabic",
+    serif;
+  font-weight: 400;
+  font-kerning: normal;
+  font-variant-ligatures: normal;
+  text-rendering: optimizeLegibility;
+}
+
 .fade-up {
   animation: fade-up 500ms ease-out both;
 }

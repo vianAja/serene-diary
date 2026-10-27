@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 import { getAuthorizedUserId } from "@/lib/authorized-user";
 import { loadWeeklyEntries } from "@/lib/daily-checklist";
 import { getScheduledTasksForRange } from "@/lib/scheduled-tasks";
@@ -98,6 +99,14 @@ export default async function WeeklyReportPage() {
 
   return (
     <div className="space-y-6">
+      <nav aria-label="Report period" className="flex gap-2">
+        <Link href="/reports/weekly" aria-current="page" className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 text-sm font-semibold text-white">
+          Weekly
+        </Link>
+        <Link href="/reports/monthly" className="inline-flex min-h-11 items-center rounded-full border border-outline bg-white px-4 text-sm font-semibold text-muted hover:text-primary">
+          Monthly
+        </Link>
+      </nav>
       <section className="surface-card rounded-[30px] p-6 md:p-7">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>

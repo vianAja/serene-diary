@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import {
   BookCheck,
   CalendarRange,
-  ChartColumn,
   FileStack,
   NotebookPen,
+  BookOpenText,
 } from "lucide-react";
 
 const links = [
@@ -23,18 +23,23 @@ const links = [
   },
   {
     href: "/reports/weekly",
-    label: "Weekly",
+    label: "Reports",
     icon: CalendarRange,
-  },
-  {
-    href: "/reports/monthly",
-    label: "Monthly",
-    icon: ChartColumn,
   },
   {
     href: "/templates",
     label: "Templates",
     icon: FileStack,
+  },
+  {
+    href: "/tahlil",
+    label: "Tahlil",
+    icon: BookOpenText,
+  },
+  {
+    href: "/tahlil",
+    label: "Tahlil",
+    icon: BookOpenText,
   },
 ];
 
@@ -51,7 +56,7 @@ export function MobileBottomNav() {
           <Link
             key={link.href}
             href={link.href}
-            className={`flex min-w-[64px] flex-col items-center justify-center rounded-xl px-2.5 py-1.5 text-[11px] font-semibold ${
+            className={`flex min-w-[56px] flex-col items-center justify-center rounded-xl px-2 py-1.5 text-[11px] font-semibold ${
               active
                 ? "bg-secondary text-accent"
                 : "text-muted hover:bg-surface-soft hover:text-primary"

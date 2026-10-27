@@ -9,6 +9,7 @@ import {
   CalendarRange,
   FileStack,
   NotebookPen,
+  BookOpenText,
   Settings,
 } from "lucide-react";
 
@@ -37,6 +38,11 @@ const links = [
     href: "/templates",
     label: "Templates",
     icon: FileStack,
+  },
+  {
+    href: "/tahlil",
+    label: "Tahlil",
+    icon: BookOpenText,
   },
   {
     href: "/calendar",

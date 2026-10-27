@@ -1,4 +1,5 @@
 import { TrendingUp } from "lucide-react";
+import Link from "next/link";
 import { getMonthlyReportSnapshot } from "@/lib/mock-data";
 
 export default function MonthlyReportPage() {
@@ -6,6 +7,14 @@ export default function MonthlyReportPage() {
 
   return (
     <div className="space-y-6">
+      <nav aria-label="Report period" className="flex gap-2">
+        <Link href="/reports/weekly" className="inline-flex min-h-11 items-center rounded-full border border-outline bg-white px-4 text-sm font-semibold text-muted hover:text-primary">
+          Weekly
+        </Link>
+        <Link href="/reports/monthly" aria-current="page" className="inline-flex min-h-11 items-center rounded-full bg-primary px-4 text-sm font-semibold text-white">
+          Monthly
+        </Link>
+      </nav>
       <section className="grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
         <article className="surface-card rounded-[30px] p-6 md:p-7">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">

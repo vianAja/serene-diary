@@ -30,6 +30,7 @@ export async function getSignedInUserEmail(): Promise<string | null> {
       return email;
     }
   } catch (error) {
+    unstable_rethrow(error);
     console.error("Failed to retrieve signed-in user for notes:", error);
   }
 

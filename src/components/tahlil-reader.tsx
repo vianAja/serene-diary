@@ -49,7 +49,7 @@ function TextSizeControl({
         >
           <Minus className="h-4 w-4" aria-hidden="true" />
         </button>
-        <span className="text-xs tabular-nums text-muted">{size} px</span>
+        <span className="sr-only">Ukuran {percent}%</span>
         <button
           type="button"
           onClick={() => onChange(Math.min(max, size + step))}
@@ -83,8 +83,8 @@ function VisibilityButton({
       className="flex min-h-11 w-full items-center justify-between rounded-lg border border-outline px-3 text-sm font-medium text-foreground hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
       <span>{label}</span>
-      <span className={`relative h-6 w-11 rounded-full transition-colors ${visible ? "bg-primary" : "bg-surface-strong"}`} aria-hidden="true">
-        <span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-transform ${visible ? "translate-x-6" : "translate-x-1"}`} />
+      <span className={`relative h-5 w-9 rounded-full transition-colors duration-200 ${visible ? "bg-primary" : "bg-surface-strong"}`} aria-hidden="true">
+        <span className={`absolute left-1 top-[3px] h-3.5 w-3.5 rounded-full bg-white transition-transform duration-200 ${visible ? "translate-x-[18px]" : "translate-x-0"}`} />
       </span>
     </button>
   );
@@ -156,16 +156,16 @@ export function TahlilReader({
   const updateSize = (kind: TextKind, value: number) => setSizes((current) => ({ ...current, [kind]: value }));
 
   return (
-    <div className={`space-y-5 ${settingsOpen ? "xl:pr-[19rem]" : ""}`}>
+    <div data-settings-open={settingsOpen} className={`space-y-5 ${settingsOpen ? "xl:pr-[21rem]" : ""}`}>
       <button
         type="button"
+        aria-label={settingsOpen ? "Tutup pengaturan teks" : "Buka pengaturan teks"}
         aria-expanded={settingsOpen}
         aria-controls="tahlil-settings-panel"
         onClick={() => setSettingsOpen((open) => !open)}
-        className="fixed right-4 top-20 z-50 inline-flex min-h-11 items-center gap-2 rounded-full border border-outline bg-surface px-4 text-sm font-semibold text-foreground shadow-lg hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        className="fixed right-4 top-20 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-outline bg-surface text-foreground shadow-lg hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
         <Settings2 className="h-4 w-4" aria-hidden="true" />
-        {settingsOpen ? "Tutup pengaturan" : "Atur teks"}
       </button>
 
       {settingsOpen ? (
@@ -179,7 +179,7 @@ export function TahlilReader({
           <aside
             id="tahlil-settings-panel"
             aria-label="Pengaturan tampilan bacaan"
-            className="fixed bottom-0 right-0 top-0 z-50 w-[min(22rem,90vw)] overflow-y-auto border-l border-outline bg-background p-4 pt-20 shadow-2xl sm:bottom-4 sm:right-4 sm:top-20 sm:rounded-2xl sm:border sm:pt-4 xl:bottom-4 xl:top-20"
+            className="fixed bottom-0 right-0 top-0 z-50 w-[min(20rem,90vw)] overflow-y-auto border-l border-outline bg-background p-4 pt-20 shadow-2xl sm:bottom-4 sm:right-4 sm:top-20 sm:rounded-2xl sm:border sm:pt-4 xl:bottom-4 xl:top-20"
           >
             <div className="mb-4 flex items-center justify-between">
               <div>

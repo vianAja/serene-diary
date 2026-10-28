@@ -51,7 +51,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
             SereneDiary
           </Link>
           <div className="flex items-center gap-2">
-            <ThemeToggle compact />
+            <ThemeToggle />
             <Link
               href="/calendar"
               aria-label="Open calendar"

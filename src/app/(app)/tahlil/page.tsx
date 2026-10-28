@@ -154,8 +154,8 @@ const closingPrayer: TahlilReading[] = [
 
 export default function TahlilPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-5 rounded-2xl bg-background p-3 text-foreground md:p-5">
-      <header className="px-2 py-3 md:px-3">
+    <div className="tahlil-page mx-auto max-w-4xl space-y-5 rounded-2xl bg-background p-3 text-foreground md:p-5">
+      <header className="w-full max-w-4xl px-2 py-3 md:px-3">
         <div className="flex items-center gap-2 text-sm font-semibold text-muted">
           <BookOpenText className="h-4 w-4" aria-hidden="true" />
           Panduan bacaan
@@ -175,7 +175,7 @@ export default function TahlilPage() {
 
       <TahlilReader readings={readings} prayers={closingPrayer} />
 
-      <footer className="rounded-xl border border-outline bg-surface p-4 text-sm leading-6 text-muted shadow-sm md:p-5">
+      <footer className="w-full max-w-4xl rounded-xl border border-outline bg-surface p-4 text-sm leading-6 text-muted shadow-sm md:p-5">
         <p className="font-semibold text-foreground">Rujukan susunan</p>
         <p className="mt-1">
           Disarikan dari susunan Tahlil dan Doa Arwah Quran NU Online. Bacaan

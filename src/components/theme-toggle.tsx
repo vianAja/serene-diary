@@ -1,23 +1,42 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export function ThemeToggle({ compact = false }: { compact?: boolean }) {
+export function ThemeToggle() {
   const [dark, setDark] = useState(false);
+  const transitionTimeout = useRef<number | null>(null);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("serene-diary-theme");
-    const initial = stored === "dark";
-    document.documentElement.dataset.theme = initial ? "dark" : "light";
-    setDark(initial);
+    setDark(document.documentElement.dataset.theme === "dark");
   }, []);
 
   function toggleTheme() {
     const nextDark = !dark;
-    document.documentElement.dataset.theme = nextDark ? "dark" : "light";
+    const root = document.documentElement;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!reduceMotion) {
+      root.classList.add("theme-transition");
+    }
+
+    root.dataset.theme = nextDark ? "dark" : "light";
     window.localStorage.setItem("serene-diary-theme", nextDark ? "dark" : "light");
     setDark(nextDark);
+
+    if (transitionTimeout.current !== null) {
+      window.clearTimeout(transitionTimeout.current);
+    }
+
+    if (reduceMotion) {
+      root.classList.remove("theme-transition");
+      return;
+    }
+
+    transitionTimeout.current = window.setTimeout(() => {
+      root.classList.remove("theme-transition");
+      transitionTimeout.current = null;
+    }, 500);
   }
 
   return (
@@ -25,10 +44,13 @@ export function ThemeToggle({ compact = false }: { compact?: boolean }) {
       type="button"
       onClick={toggleTheme}
       aria-label={dark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+      aria-pressed={dark}
       title={dark ? "Mode terang" : "Mode gelap"}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full border border-outline bg-surface text-primary hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${compact ? "h-10 w-10" : "h-10 w-10"}`}
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-outline bg-surface text-primary hover:bg-surface-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
     >
-      {dark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
+      <span className={`transition-transform duration-300 motion-reduce:transition-none ${dark ? "rotate-180" : "rotate-0"}`}>
+        {dark ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
+      </span>
     </button>
   );
 }

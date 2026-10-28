@@ -15,6 +15,45 @@
   --shadow: 0 12px 32px rgba(17, 45, 78, 0.08);
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #111820;
+  --foreground: #e8eef2;
+  --muted: #b1bfca;
+  --surface: #1a242e;
+  --surface-soft: #222f3b;
+  --surface-strong: #394958;
+  --primary: #a8cee8;
+  --primary-soft: #83b4d6;
+  --secondary: #2c3a47;
+  --accent: #d3e8f5;
+  --outline: #394958;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+:root[data-theme="dark"] .bg-white {
+  background-color: var(--surface) !important;
+}
+
+:root[data-theme="dark"] .bg-slate-100 {
+  background-color: var(--surface-soft) !important;
+}
+
+:root[data-theme="dark"] .text-slate-700,
+:root[data-theme="dark"] .text-slate-600,
+:root[data-theme="dark"] .text-slate-500 {
+  color: var(--muted) !important;
+}
+
+:root[data-theme="dark"] .bg-primary,
+:root[data-theme="dark"] [class*="bg-primary/"] {
+  background-color: #386b99 !important;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -61,13 +100,13 @@ button {
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.86);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
   backdrop-filter: blur(12px);
 }
 
 .surface-card {
   background: var(--surface);
-  border: 1px solid rgba(219, 226, 239, 0.9);
+  border: 1px solid var(--outline);
   box-shadow: var(--shadow);
 }
 

@@ -21,7 +21,6 @@ export const checklistTemplates = pgTable("checklist_templates", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
-
 export const allowedUsers = pgTable("allowed_users", {
   id: text("id").primaryKey(),
   email: text("email").notNull().unique(),
@@ -82,6 +81,20 @@ export const scheduledTasks = pgTable("scheduled_tasks", {
   category: text("category").notNull().default("Scheduled"),
   taskDate: date("task_date").notNull(),
   window: text("window").notNull().default("Scheduled"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const notes = pgTable("notes", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  authorEmail: text("author_email").notNull(),
+  authorName: text("author_name"),
+  title: text("title").notNull(),
+  content: text("content").notNull().default(""),
+  category: text("category").notNull().default("General"),
+  visibility: text("visibility").notNull().default("private"), // 'public' | 'authenticated' | 'private'
+  isPinned: boolean("is_pinned").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

@@ -154,18 +154,18 @@ const closingPrayer: TahlilReading[] = [
 
 export default function TahlilPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-5 rounded-[14px] bg-[#171e26] p-3 text-[#f0f4f6] md:p-5">
+    <div className="mx-auto max-w-4xl space-y-5 rounded-2xl bg-background p-3 text-foreground md:p-5">
       <header className="px-2 py-3 md:px-3">
-        <div className="flex items-center gap-2 text-sm font-semibold text-[#bac8d1]">
+        <div className="flex items-center gap-2 text-sm font-semibold text-muted">
           <BookOpenText className="h-4 w-4" aria-hidden="true" />
           Panduan bacaan
         </div>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-white md:text-4xl">Tahlil</h1>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-[#d5dfe5]">
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground md:text-4xl">Tahlil</h1>
+        <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
           Rangkaian dzikir dan doa, lengkap dengan tulisan Arab, latin, dan terjemahan.
         </p>
-        <div className="mt-4 flex items-start gap-3 rounded-[10px] border border-[#36434f] bg-[#202a33] p-4 text-sm leading-6 text-[#d5dfe5]">
-          <HeartHandshake className="mt-0.5 h-5 w-5 shrink-0 text-[#c3d7e4]" aria-hidden="true" />
+        <div className="mt-4 flex items-start gap-3 rounded-xl border border-outline bg-surface p-4 text-sm leading-6 text-muted shadow-sm">
+          <HeartHandshake className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
           <p>
             Susunan dan jumlah bacaan dapat berbeda menurut tradisi setempat.
             Panduan ini mengikuti salah satu susunan tahlil yang umum digunakan.
@@ -175,15 +175,15 @@ export default function TahlilPage() {
 
       <TahlilReader readings={readings} prayers={closingPrayer} />
 
-      <footer className="rounded-[10px] border border-[#35424e] bg-[#202a33] p-4 text-sm leading-6 text-[#c8d3db] md:p-5">
-        <p className="font-semibold text-white">Rujukan susunan</p>
+      <footer className="rounded-xl border border-outline bg-surface p-4 text-sm leading-6 text-muted shadow-sm md:p-5">
+        <p className="font-semibold text-foreground">Rujukan susunan</p>
         <p className="mt-1">
           Disarikan dari susunan Tahlil dan Doa Arwah Quran NU Online. Bacaan
           Al-Qur’an pada halaman ini ditampilkan sebagai panduan; silakan
           merujuk mushaf untuk memastikan tajwid dan makhraj.
         </p>
         <a
-          className="mt-2 inline-flex min-h-11 items-center font-semibold text-[#c5deed] underline underline-offset-4 hover:text-white"
+          className="mt-2 inline-flex min-h-11 items-center font-semibold text-primary underline underline-offset-4 hover:text-primary-soft"
           href="https://quran.nu.or.id/tahlil"
           target="_blank"
           rel="noreferrer"

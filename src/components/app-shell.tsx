@@ -7,6 +7,7 @@ import { getViewerProfile } from "@/lib/viewer-profile";
 import { ProfileMenu } from "@/components/profile-menu";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { WorkspaceDateLabel } from "@/components/workspace-date-label";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export async function AppShell({ children }: { children: ReactNode }) {
   const profile = await getViewerProfile();
@@ -22,6 +23,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link
               href="/calendar"
               aria-label="Open calendar"
@@ -49,6 +51,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
             SereneDiary
           </Link>
           <div className="flex items-center gap-2">
+            <ThemeToggle compact />
             <Link
               href="/calendar"
               aria-label="Open calendar"

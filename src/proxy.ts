@@ -51,7 +51,9 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
+  const isPublicNoteRoute = /^\/notes\/[^/]+$/.test(pathname) && pathname !== "/notes/new";
+  const isPublicRoute =
+    publicRoutes.some((route) => pathname.startsWith(route)) || isPublicNoteRoute;
 
   if (isPublicRoute) {
     return NextResponse.next();

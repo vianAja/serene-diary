@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSignedInUserEmail } from "@/lib/authorized-user";
 import { createNote, getNotesForUser, isNoteVisibility, NoteStorageError } from "@/lib/notes";
+import type { NoteVisibility } from "@/lib/notes";
 
 export async function GET() {
   const userId = await getSignedInUserEmail();
